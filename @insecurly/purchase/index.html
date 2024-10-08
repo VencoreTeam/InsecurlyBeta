@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/Image Assets/InsecurlyLogo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Insecurly | Purchase</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      zoom: 0.9;
+    }
+
+    .insecurly-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+
+    .insecurly-header img {
+      width: 80px;
+      height: auto;
+      margin-right: 20px;
+    }
+
+    .insecurly-header h1 {
+      font-size: 2.5em;
+      margin: 0;
+      color: #61dafb;
+      text-shadow: 0 0 10px rgba(97, 218, 251, 0.5);
+    }
+
+    .subscription-container {
+      background: rgba(255, 255, 255, 0);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 1000px;
+      width: 100%;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      user-select: none;
+      gap: 40px;
+    }
+
+    .plan {
+      flex: 1 1 300px;
+      padding: 30px;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      background-size: 200% 200%;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .free-plan {
+      background: linear-gradient(45deg, #4e54c8, #8f94fb);
+    }
+
+    .premium-plan {
+      background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);
+    }
+
+    .suggested-label {
+      position: absolute;
+      top: 10px;
+      right: -30px;
+      background: #FFD700;
+      color: #000;
+      padding: 5px 30px;
+      transform: rotate(45deg);
+      font-size: 12px;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .plan:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .plan h2 {
+      margin: 0 0 20px;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .features {
+      margin: 30px 0;
+      list-style: none;
+      padding: 0;
+    }
+
+    .features li {
+      margin: 15px 0;
+      font-size: 16px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #fff;
+      color: #333;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cta-button:hover {
+      background: #333;
+      color: #fff;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    /* Popup styles */
+    .popup-container {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .popup-content h2 {
+      margin-top: 0;
+      color: #61dafb;
+    }
+
+    .popup-content p {
+      margin-bottom: 20px;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .subscription-container {
+        flex-direction: column;
+      }
+      .plan {
+        margin-bottom: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="insecurly-header">
+    <img src="/Image Assets/InsecurlyLogo.png" alt="Insecurly Logo">
+    <h1>Insecurly Corp</h1>
+  </div>
+
+  <div class="subscription-container">
+    <div class="plan free-plan">
+      <h2>Free Plan</h2>
+      <p>Basic features for everyone</p>
+      <ul class="features">
+        <li>Access to essential content</li>
+        <li>Limited downloads</li>
+        <li>Community support</li>
+      </ul>
+      <a href="#" class="cta-button" onclick="showPopup('free')">Get Started</a>
+    </div>
+
+    <div class="plan premium-plan">
+      <div class="suggested-label">&nbsp; &nbsp; &nbsp; &nbsp; SUGGESTED</div>
+      <h2>Premium Plan</h2>
+      <p>Unlock the full experience</p>
+      <ul class="features">
+        <li>Unlimited access to all methods</li>
+        <li>Unlimited access to all proxies</li>
+        <li>Priority customer support</li>
+      </ul>
+      <a href="#" class="cta-button" onclick="showPopup('premium')">Subscribe Now</a>
+    </div>
+  </div>
+
+  <div class="popup-container" id="popup">
+    <div class="popup-content" id="popup-content">
+      <!-- Popup content goes here -->
+    </div>
+  </div>
+
+  <script>
+    function showPopup(plan) {
+      const popup = document.getElementById('popup');
+      const popupContent = document.getElementById('popup-content');
+
+      // Customize popup content based on the plan
+      if (plan === 'free') {
+        popupContent.innerHTML = '<h2>Free Plan</h2><p>You already own this plan by default.</p><button class="cta-button" onclick="closePopup()">Close</button>';
+      } else if (plan === 'premium') {
+        popupContent.innerHTML = '<h2>Premium Plan</h2><p>To Purchase The Premium Plan, please contact one of our Anonymous Admins in your school, if available.</p><p><strong>Note:</strong> Purchases can only be made in person.</p><button class="cta-button" onclick="closePopup()">Close</button>';
+      }
+
+      popup.style.display = 'flex';
+    }
+
+    function closePopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

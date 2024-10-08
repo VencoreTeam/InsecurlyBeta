@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://image-hoster-with-paste-nodejs-tool.drippysellers.repl.co/Exrqa.png">
+    <link rel="icon" type="image/x-icon" href="/Image Assets/InsecurlyLogo.png">
+    <link rel="stylesheet" href="/CSS Assets/loading-site.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Insecurly - Redeem</title>
+    <style>
+        body.miles-mode {
+            background-image: url('/Theme Assets/gwen&miles.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        body, .dark-mode {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #0f0f17;
+            color: #e0e0e0;
+        }
+    
+        h1 {
+            margin: 20px 0;
+            color: #ffffff;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+    
+        p {
+            color: #a8a8b3;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+    
+        input[type="text"] {
+            width: 250px;
+            padding: 12px;
+            margin: 15px 0;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            border: 2px solid #2e2e3f;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            border-color: #3f3f4f;
+        }
+    
+        button {
+            padding: 12px 25px;
+            background-color: #5865f2;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+    
+        button:hover {
+            background-color: #4752c4;
+            transform: translateY(-2px);
+        }
+    
+        #status-message {
+            color: #ff7070;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+
+        .promocodes-container {
+            background-color: rgba(30, 30, 46, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        a {
+            color: #5865f2;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #4752c4;
+            text-decoration: underline;
+        }
+
+        .discord-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #5865f2;
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .discord-link:hover {
+            background-color: #4752c4;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+    </style>
+    
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div style="text-align: center;">
+            <h1>Insecurly Inc.</h1>
+            <img src="/Image Assets/InsecurlyLogo.png" width="100" height="100" class="loading-logo">
+            <br><br>
+            <div id="randomTip" style="color: white; margin-top: 10px;"></div>
+            <div id="Version" style="color: white; margin-top: 10px;">Version v1.0.0</div>
+        </div>
+    </div>
+    
+    <div class="promocodes-container">
+        <h1><img src="/Image Assets/InsecurlyLogo.png" class="logo" alt="Insecurly Logo">Redeem</h1>
+        <p>Have a promo code? Enter it here:</p>
+        <input type="text" id="promo-code-input" placeholder="Enter your promo code">
+        <button id="redeem-button"><i class="fas fa-gift"></i> Redeem</button>
+        <p id="status-message"></p>
+        <p style="display: none;">Where Can I Find PromoCodes? <a href="https://dsc.gg/insecurly" class="discord-link"><i class="fab fa-discord"></i> Join Insecurly Discord Server</a></p>
+        <img style="display: none;" src="/Image Assets/InsecurlyLogo.png" style="border-radius: 10px; max-width: 100px; margin: 20px 0;">
+        <p>If you don't have a promo code yet, you can obtain one by participating in our events or promotions. Stay tuned for exciting opportunities!</p>
+        <p>For any assistance or inquiries, please contact our support team at <a href="mailto:support@wordcoach.x10.bz">support@wordcoach.x10.bz</a>.</p>
+    </div>
+
+</body>
+</html>
+
+<!-- Include Firebase initialization -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+   // Insecurly CONFIG
+   const firebaseConfig = {
+  apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+  authDomain: "insecurly.firebaseapp.com",
+  databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+  projectId: "insecurly",
+  storageBucket: "insecurly.appspot.com",
+  messagingSenderId: "720308147008",
+  appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+  measurementId: "G-L1KYG6M7WZ"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const realtimeDb = firebase.database();
+
+// Redeem Promo Code Logic
+document.getElementById("redeem-button").addEventListener("click", () => {
+    const promoCode = document.getElementById("promo-code-input").value;
+    const statusMessage = document.getElementById("status-message");
+
+    // Check the user's login state
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // User is logged in, you can proceed with the redemption logic
+
+            // Check if the user already has premium status
+            db.collection("users").doc(user.uid).get().then((userDoc) => {
+                const isPremium = userDoc.data().isPremium;
+
+                if (isPremium) {
+                    statusMessage.textContent = "You already have premium status!";
+                } else {
+                    // Check if the promo code input field is empty
+                    if (!promoCode) {
+                        statusMessage.textContent = "Please Enter a Promocode.";
+                        return;
+                    }
+
+                    // Define promo codes and their effects
+                    const promoCodes = {
+                        "LoveFromOwners": { effect: "premium", maxRedemptions: 5 },
+                        // Add more promo codes here
+                    };
+
+                    // Check if the entered promo code exists
+                    if (promoCode in promoCodes) {
+                        const promoData = promoCodes[promoCode];
+                        
+                        // Check redemption count in Realtime Database
+                        const promoCodeRef = realtimeDb.ref("PromoCodes").child(promoCode);
+                        promoCodeRef.once("value", (snapshot) => {
+                            const currentRedemptions = snapshot.exists() ? snapshot.val().redeemed : 0;
+
+                            if (currentRedemptions >= promoData.maxRedemptions) {
+                                statusMessage.textContent = "This PromoCode has reached its maximum redemptions.";
+                            } else {
+                                // Apply promo code effect
+                                if (promoData.effect === "premium") {
+                                    db.collection("users").doc(user.uid).update({ isPremium: true });
+                                }
+                                // Add more effects here as needed
+
+                                // Update the redemption count
+                                promoCodeRef.update({ redeemed: currentRedemptions + 1 });
+
+                                statusMessage.textContent = "Promo code redeemed successfully!";
+                                document.getElementById("promo-code-input").value = "";
+                            }
+                        });
+                    } else {
+                        statusMessage.textContent = "Invalid promo code. Please check and try again.";
+                    }
+                }
+            });
+        } else {
+            statusMessage.textContent = "You must be logged in to redeem this promo code.";
+        }
+    });
+});
+</script>
+<script src="/JavaScript Assets/pagescripts.js"></script>
+<script src="/JavaScript Assets/loading-site.js"></script>

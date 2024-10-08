@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Switcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      transition: background-color 0.5s ease;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #000020;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #010160;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      color: white;
+    }
+
+    .theme-circle {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      margin: 0 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Light theme styles */
+    #lightTheme {
+      background-color: #f8f9fa;
+    }
+
+    /* Dark theme styles */
+    #darkTheme {
+      background-color: #333;
+    }
+
+    /* Space theme styles */
+    #spaceTheme {
+      background-color: #000;
+      background-image: url('/Theme Assets/space.png');
+      background-size: cover;
+    }
+
+    /* Gold theme styles */
+    #goldTheme {
+      background-color: #ffd700;
+    }
+
+    /* Miles Morales theme styles */
+    #milesTheme {
+      background-image: url('/Theme Assets/gwen&miles.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .selected {
+      border: 2px solid #007bff;
+    }
+
+    /* Dark theme styles */
+    body.dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+
+    body.dark-mode .container {
+      background-color: #444;
+      color: #fff;
+    }
+
+    body.dark-mode .theme-circle {
+      background-color: #555;
+    }
+
+    body.dark-mode .selected {
+      border: 2px solid #17a2b8;
+    }
+
+    /* Space theme styles */
+    body.space-mode {
+      background-color: #000;
+      background-image: url('/Theme Assets/space.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #fff;
+    }
+
+    /* Gold theme styles */
+    body.gold-mode {
+      background-color: #ffd700;
+      color: #000;
+    }
+
+    body.gold-mode .container {
+      background-color: #ffd700;
+      color: #000;
+    }
+
+    body.gold-mode .theme-circle {
+      background-color: #ffd700;
+    }
+
+    body.gold-mode .selected {
+      border: 2px solid #000;
+    }
+
+    /* Miles Morales theme styles */
+    body.miles-mode {
+      background-image: url('/Theme Assets/gwen&miles.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: transparent;
+      color: #fff;
+    }
+
+    body.miles-mode .container {
+      background-image: url('/Theme Assets/miles-logo.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: #020202;
+      color: #fff;
+      opacity: 60%;
+    }
+
+    body.miles-mode .theme-circle {
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    body.miles-mode .selected {
+      border: 2px solid #fff;
+    }
+
+    /* Media query for smaller screens to use background-size: contain */
+    @media screen and (max-width: 768px) {
+      body.space-mode {
+        background-size: contain;
+      }
+    }
+
+    body.space-mode .container {
+      background-color: #111;
+      color: #fff;
+    }
+
+    body.space-mode .theme-circle {
+      background-color: #444;
+    }
+
+    body.space-mode .selected {
+      border: 2px solid #17a2b8;
+    }
+
+    /* Popup styles */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    .popup button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Dark theme for the popup */
+    body.dark-mode .popup {
+      background-color: #333;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container" id="themeContainer">
+    <h1>Theme Switcher</h1>
+    <p>Click the circles to switch between themes.</p>
+    <div id="goldTheme" class="theme-circle" onclick="previewTheme('gold')" title="Gold Theme"></div>
+    <div id="spaceTheme" class="theme-circle" onclick="previewTheme('space')" title="Space Theme"></div>
+    <div id="milesTheme" class="theme-circle" onclick="previewTheme('miles')" title="Gwen & Miles Theme"></div>
+  </div>
+
+  <!-- Theme preview popup -->
+  <div id="themePreview" class="popup">
+    <h2>Theme Preview</h2>
+    <p>This is how your selected theme will look. Do you want to apply it?</p>
+    <button onclick="setTheme(previewThemeName)">Set Theme</button>
+    <button onclick="cancelPreview()">Cancel</button>
+  </div>
+
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+    import { doc, setDoc, getDoc, FieldValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+   // Insecurly CONFIG
+   const firebaseConfig = {
+  apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+  authDomain: "insecurly.firebaseapp.com",
+  databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+  projectId: "insecurly",
+  storageBucket: "insecurly.appspot.com",
+  messagingSenderId: "720308147008",
+  appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+  measurementId: "G-L1KYG6M7WZ"
+};
+    // Initialize Firebase app
+    const app = initializeApp(firebaseConfig);
+  
+    // Reference to the Firebase Authentication service
+    const auth = getAuth();
+  
+    const db = getFirestore();
+
+    const storage = getStorage(app);
+  
+  onAuthStateChanged(auth, async (user) => {
+  const userUsername = document.getElementById("user-username");
+  const userProfilePicture = document.getElementById("user-profile-picture");
+  const accountSettingsOption = document.getElementById("account-settings-option");
+  const PlanPageOption = document.getElementById("plan-manager-option");
+  const RedeemPageOption = document.getElementById("redeem-page-option");
+  const logoutOption = document.getElementById("logout-option");
+  const premiumStatusWrapper = document.getElementById("premium-status-wrapper");
+
+  if (user) {
+    // User is logged in
+
+    // Check the "isPremium" field in the Firestore document
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    const isPremium = userDoc.data() && userDoc.data().isPremium;
+    const isAdmin = userDoc.data() && userDoc.data().isAdmin; // Add this line
+    const isOwner = userDoc.data() && userDoc.data().isOwner;
+    if (isPremium === false) {
+
+      window.location.href = "/@insecurly/home/basic"; // Redirect to the "/code" page
+      return;
+    }
+
+  } else {
+    // User is not logged in
+    window.location.href = "/@insecurly/auth/login"; // Redirect to the login page
+  }
+});
+  </script>
+
+
+     <script src="/JavaScript Assets/pagescripts.js"></script>
+
+</body>
+
+</html>

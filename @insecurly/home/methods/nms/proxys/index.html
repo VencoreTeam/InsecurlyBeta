@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insecurly | Proxys</title>
+    <link rel="icon" type="image/x-icon" href="/Image Assets/InsecurlyLogo.png">
+    <link rel="stylesheet" href="/@insecurly/home/methods/nms/proxys/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --background-color: #000020;
+            --text-color: #333;
+            --card-background: #070742;
+        }
+
+        body {
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2em;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            user-select: none;
+        }
+
+        .proxy-category {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .proxy-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .trending {
+            background-color: var(--card-background);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+
+        .trending h2 {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .trending ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .trending li {
+            flex: 0 1 calc(14.28% - 15px);
+            margin: 8px 0;
+        }
+
+        a {
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        a:hover {
+            transform: translateX(5px);
+        }
+
+        a i {
+            margin-right: 10px;
+            font-size: 1em;
+        }
+
+        /* New styles for unique proxy colors */
+        .proxy-interstellar { color: #ff6b6b; }
+        .proxy-dodge { color: #4ecdc4; }
+        .proxy-asteroids { color: #45aaf2; }
+        .proxy-asteroids-alt { color: #2ecc71; }
+        .proxy-spacego { color: #fd9644; }
+
+        /* Hover effect for proxy links */
+        .proxy-interstellar:hover { color: #ff8787; }
+        .proxy-dodge:hover { color: #6be5d8; }
+        .proxy-asteroids:hover { color: #6fc6ff; }
+        .proxy-asteroids-alt:hover { color: #4aed8d; }
+        .proxy-spacego:hover { color: #ffb260; }
+
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            color: #777;
+            user-select: none;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 15px;
+        }
+        .notice {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-width: 80%;
+            text-align: center;
+        }
+        .notice h3 {
+            color: #e74c3c;
+        }
+        .notice button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .footer i {
+            margin-right: 5px;
+            color: #555;
+        }
+
+        .proxy-category ul {
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .proxy-category ul::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .proxy-category ul::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .proxy-category ul::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .proxy-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .proxy-name {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Speed indicator badge styles */
+        .speed-badge {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            white-space: nowrap;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .speed-fast { background-color: #2ecc71; color: white; }
+        .speed-medium { background-color: #f39c12; color: white; }
+        .speed-slow { background-color: #e74c3c; color: white; }
+
+        /* Futuristic credits intro styles */
+        .credits-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 3s ease-in-out 5s forwards;
+        }
+
+        .credits-intro h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #3498db;
+        }
+
+        .credits-intro p {
+            font-size: 1.5em;
+            margin: 10px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .credits-intro img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="credits-intro">
+        <img src="/Image Assets/InsecurlyLogo.png" alt="Insecurly Logo">
+        <h1>Insecurly Proxys</h1>
+        <p style="animation-delay: 1s;">Created by AnnonDev</p>
+        <p style="animation-delay: 2s;">Co-Made by Scott</p>
+        <p style="animation-delay: 3s;">Empowering secure browsing</p>
+    </div>
+
+    <nav class="navbar">
+        <div class="navbar-logo"><img src="/Image Assets/InsecurlyLogo.png" width="30" height="30">Proxys</div>
+        <li><a href="/community"></a></li>
+        
+        <div class="account-menu">
+            <div class="account-menu">
+                
+            &nbsp;
+            &nbsp;
+            
+                <span id="notification-icon" class="notification-icon">
+                    <span id="premium-status-wrapper"></span> <!-- New span element -->
+
+                    
+                <i class="fas fa-bell" aria-hidden="true"></i>
+                </span>
+                <img id="user-profile-picture" src="#" alt="Profile Picture">
+                <span id="user-username"></span> &#9662;
+                <br>
+                <div class="account-menu-options">
+                <div class="account-menu-option" id="account-settings-option">Account Settings</div>
+                <div class="account-menu-option" id="plan-manager-option">Plan Manager</div>
+                <div class="account-menu-option" id="redeem-page-option">Promocodes</div>
+
+                <div class="account-menu-option" id="logout-option">Logout</div>
+                </div>
+            </div>
+            <div class="notification-menu" id="notification-menu">
+                <!-- Notifications will be displayed here -->
+            </div>      
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Premium Proxy Dashboard</h1>
+        
+        <div class="trending">
+            <h2><i class="fas fa-fire"></i> Trending Proxies</h2>
+            <ul>
+                <li>
+                    <div class="proxy-link">
+                        <a href="https://interstellar20.vercel.app/" class="proxy-interstellar proxy-name">
+                            <i class="fas fa-star"></i>Interstellar
+                        </a>
+                        <span class="speed-badge speed-fast">Fast</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="proxy-link">
+                        <a href="http://www.spacegoo.com/" class="proxy-interstellar proxy-name">
+                            <i class="fas fa-rocket"></i>SpaceGo
+                        </a>
+                        <span class="speed-badge speed-fast">Fast</span>
+                    </div>
+                </li>
+                    <li>
+                    <div class="proxy-link">
+                        <a href="https://adbox.ipv64.net/" class="proxy-interstellar proxy-name">
+                            <i class="fas fa-meteor"></i>Asteroids
+                        </a>
+                        <span class="speed-badge speed-fast">Fast</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="dashboard">
+            <div class="proxy-category">
+                <h2><i class="fas fa-globe"></i> Web Proxies</h2>
+                <ul>
+                    <li>
+                        <div class="proxy-link">
+                            <a href="https://interstellar20.vercel.app/" class="proxy-interstellar proxy-name">
+                                <i class="fas fa-star"></i>Interstellar
+                            </a>
+                            <span class="speed-badge speed-fast">Fast</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="proxy-link">
+                            <a href="https://higuys.webgiga.com" class="proxy-dodge proxy-name">
+                                <i class="fas fa-shield-alt"></i>Dodge Unblocker
+                            </a>
+                            <span class="speed-badge speed-medium">Ok Speed</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="proxy-link">
+                            <a href="https://adbox.ipv64.net/" class="proxy-asteroids proxy-name">
+                                <i class="fas fa-meteor"></i>Asteroids
+                            </a>
+                            <span class="speed-badge speed-medium">Ok Speed</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="proxy-link">
+                            <a href="https://superapple.ipv64.net" class="proxy-asteroids-alt proxy-name">
+                                <i class="fas fa-meteor"></i>Asteroids (Alternate)
+                            </a>
+                            <span class="speed-badge speed-medium">Ok Speed</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="proxy-link">
+                            <a href="http://www.spacegoo.com/" class="proxy-spacego proxy-name">
+                                <i class="fas fa-rocket"></i>SpaceGo
+                            </a>
+                            <span class="speed-badge speed-fast">Fast</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="proxy-category">
+                <h2><i class="fas fa-lock"></i> VPN Services</h2>
+                <ul>
+                    <li><a href="#"><i class="fas fa-clock"></i> Coming Soon</a></li>
+                </ul>
+            </div>
+            
+            <div class="proxy-category">
+                <h2><i class="fas fa-puzzle-piece"></i>Extensions</h2>
+                <ul>
+                    <li><a href="#"><i class="fas fa-clock"></i> Coming Soon</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p><i class="fas fa-user-secret"></i> Made by AnnonDev • <i class="fas fa-user"></i> Co-Made by Scott</p>
+        </footer>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="notice" id="notice">
+        <h3>Notice</h3>
+        <p>Sharing proxy links is prohibited. Violations will result in immediate account termination without refund.</p>
+        <button onclick="closeNotice()">I Understand</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('notice').style.display = 'none';
+        }
+
+        function closeNotice() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('notice').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+<script type="module">
+    import {
+    	initializeApp
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import {
+    	getAuth,
+    	onAuthStateChanged,
+    	signOut
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import {
+    	getFirestore,
+    	collection,
+    	getDocs,
+    	query,
+    	orderBy,
+    	onSnapshot
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import {
+    	getStorage,
+    	ref,
+    	getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+    import {
+    	doc,
+    	setDoc,
+    	getDoc,
+    	FieldValue
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    const firebaseConfig = {
+    	apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+    	authDomain: "insecurly.firebaseapp.com",
+    	databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+    	projectId: "insecurly",
+    	storageBucket: "insecurly.appspot.com",
+    	messagingSenderId: "720308147008",
+    	appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+    	measurementId: "G-L1KYG6M7WZ"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore();
+    const storage = getStorage(app);
+    onAuthStateChanged(auth, async(user) => {
+    	const userUsername = document.getElementById("user-username");
+    	const userProfilePicture = document.getElementById("user-profile-picture");
+    	const accountSettingsOption = document.getElementById("account-settings-option");
+    	const PlanPageOption = document.getElementById("plan-manager-option");
+    	const RedeemPageOption = document.getElementById("redeem-page-option");
+    	const AdminPanelOption = document.getElementById("panel-option");
+    	const logoutOption = document.getElementById("logout-option");
+    	const premiumStatusWrapper = document.getElementById("premium-status-wrapper");
+    	if (user) {
+    		const userDocRef = doc(db, 'users', user.uid);
+    		const userDoc = await getDoc(userDocRef);
+    		const isPremium = userDoc.data() && userDoc.data().isPremium;
+    		if (isPremium === false) {
+    			window.location.href = "/@insecurly/home/basic";
+    			return;
+    		}
+    		const isAdmin = userDoc.data() && userDoc.data().isAdmin;
+    		const isOwner = userDoc.data() && userDoc.data().isOwner;
+    		if (isAdmin) {
+    			premiumStatusWrapper.textContent = 'Admin';
+    			premiumStatusWrapper.style.backgroundColor = '#000';
+    			premiumStatusWrapper.style.color = '#fff';
+    			premiumStatusWrapper.style.borderRadius = '20px';
+    			premiumStatusWrapper.style.padding = '5px 10px';
+    			premiumStatusWrapper.style.zIndex = '1';
+    			premiumStatusWrapper.style.backgroundImage = 'url("https://t3.ftcdn.net/jpg/02/95/15/72/240_F_295157232_A3vxSfsPOwO97ozgUr6U9po7vFIrGajG.webp")';
+    			premiumStatusWrapper.style.backgroundSize = 'cover';
+    		} else if (isOwner) {
+    			premiumStatusWrapper.textContent = 'Insecurly Owner';
+    			premiumStatusWrapper.style.backgroundColor = '#000';
+    			premiumStatusWrapper.style.color = '#fff';
+    			premiumStatusWrapper.style.borderRadius = '20px';
+    			premiumStatusWrapper.style.padding = '5px 10px';
+    			premiumStatusWrapper.style.zIndex = '1';
+    			premiumStatusWrapper.style.backgroundImage =
+    				'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5c5ybpEprgTQRz-_gMNmsTpqXjY3VQ0tClOT6tZMd5KNx7xmEP6PHD-KbIAfW0ma2AOs&usqp=CAU")';
+    			premiumStatusWrapper.style.backgroundSize = 'cover';
+    		} else {
+    			const premiumStatusContainer = document.createElement('div');
+    			premiumStatusContainer.classList.add('premium-status-container');
+    			premiumStatusContainer.textContent = isPremium ? 'Plus Plan' : 'Basic Plan';
+    			premiumStatusContainer.classList.remove('basic', 'plus');
+    			premiumStatusContainer.classList.add(isPremium ? 'plus' : 'basic');
+    			premiumStatusContainer.style.backgroundColor = isPremium ? '#ffd700' : '#3498db';
+    			const accountMenu = document.querySelector('.account-menu');
+    			accountMenu.appendChild(premiumStatusContainer);
+    		}
+    		userUsername.textContent = user.displayName || "User";
+    		userProfilePicture.src = user.photoURL || "/Image Assets/default-pfp.png";
+    		accountSettingsOption.addEventListener("click", () => {
+    			window.location.href = "/@insecurly/settings";
+    		});
+    		PlanPageOption.addEventListener("click", () => {
+    			window.location.href = "/@insecurly/manage-plan";
+    		});
+    		RedeemPageOption.addEventListener("click", () => {
+    			window.location.href = "/@insecurly/redeem";
+    		});
+    		AdminPanelOption.addEventListener("click", () => {
+    			window.location.href = "/@insecurly/admin-panel";
+    		});
+    		logoutOption.addEventListener("click", () => {
+    			signOut(auth).then(() => {
+    				console.log("User logged out.");
+    				window.location.href = "/@insecurly/auth/login";
+    			}).catch((error) => {
+    				console.error("Logout error:", error.message);
+    			});
+    		});
+    	} else {
+    		window.location.href = "/@insecurly/auth/login";
+    	}
+    });
+
+    function toggleNotificationContainer(e) {
+    	const notificationMenu = document.getElementById("notification-menu");
+    	if (notificationMenu.style.display === "block") {
+    		notificationMenu.style.display = "none";
+    	} else {
+    		notificationMenu.style.display = "block";
+    	}
+    	e.stopPropagation();
+    }
+    const notificationIcon = document.getElementById("notification-icon");
+    notificationIcon.addEventListener("click", toggleNotificationContainer);
+    document.addEventListener("click", (e) => {
+    	const notificationMenu = document.getElementById("notification-menu");
+    	if (notificationMenu.style.display === "block") {
+    		notificationMenu.style.display = "none";
+    	}
+    });
+
+    function displayNotification(sender, text, timestamp) {
+    	const notificationMenu = document.getElementById("notification-menu");
+    	const notificationItem = document.createElement("div");
+    	notificationItem.className = "notification-menu-item";
+    	const senderElement = document.createElement("div");
+    	senderElement.textContent = `@${sender}`;
+    	const textElement = document.createElement("div");
+    	textElement.textContent = text;
+    	const timestampElement = document.createElement("div");
+    	timestampElement.textContent = `${timestamp}`;
+    	notificationItem.appendChild(senderElement);
+    	notificationItem.appendChild(textElement);
+    	notificationItem.appendChild(timestampElement);
+    	notificationMenu.appendChild(notificationItem);
+    }
+
+    function fetchAndDisplayNotifications() {
+    	const notificationsCollection = collection(db, "notifications");
+    	const notificationsQuery = query(notificationsCollection, orderBy("timestamp", "desc"));
+    	const notificationMenu = document.getElementById("notification-menu");
+    	onSnapshot(notificationsQuery, (snapshot) => {
+    		notificationMenu.innerHTML = '';
+    		snapshot.forEach((doc) => {
+    			const notification = doc.data();
+    			displayNotification(notification.sender, notification.text, notification.timestamp);
+    		});
+    	});
+    }
+    window.addEventListener("load", fetchAndDisplayNotifications);
+  </script>
+    <script src="/JavaScript Assets/pagescripts.js"></script>
+    <script src="/JavaScript Assets/loading-site.js"></script>

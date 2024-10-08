@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <meta property="og:title" content="Insecurly - Sign Up">
+  <meta property="og:description" content="Join Insecurly to connect with friends and explore new possibilities!">
+  <meta property="og:image" content="https://waveeassets.drippysellers.repl.co/Exrqa.png/">
+  <meta property="og:url" content="https://insecurly.com/auth/signup">
+  <link rel="icon" type="image/x-icon" href="/Image Assets/InsecurlyLogo.png">
+  <title>Insecurly | Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <h1 class="logo">Insecurly</h1>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="auth-container">
+      <div class="auth-card">
+        <img src="https://img.icons8.com/?size=80&id=Dsf34lE4rtPF&format=png" width="60" height="50" alt="Insecurly Logo" class="auth-logo">
+        <h2 style="display: none;" class="auth-title">Join Insecurly</h2>
+        <p style="display: none;" class="auth-description">Create an account to connect and explore!</p>
+        <form id="signup-form" class="auth-form">
+          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="signup-username" placeholder="Username" required>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="signup-email" placeholder="Email" required>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="signup-password" placeholder="Password" required>
+          </div>
+          <p id="signup-error" class="error-message"></p>
+          <button type="submit" class="auth-button">Sign Up</button>
+        </form>
+        <div class="already-account">
+          <p>Already have an account? <a href="/@insecurly/auth/login"><bold>Log In</bold></a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <audio id="waveSound">
+    <source src="/Image Assets/WaveWoosh.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <footer class="footer">
+    <p>&copy; 2023 Insecurly Inc. All rights reserved.</p>
+  </footer>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebase/8.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebase/8.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebase/8.9.1/firebase-firestore.js"></script>
+  
+  <!-- Page Core JS Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { setDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+   // Insecurly CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+  authDomain: "insecurly.firebaseapp.com",
+  databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+  projectId: "insecurly",
+  storageBucket: "insecurly.appspot.com",
+  messagingSenderId: "720308147008",
+  appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+  measurementId: "G-L1KYG6M7WZ"
+};
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    // Reference to the Firebase Authentication service
+    const auth = getAuth();
+
+    // Reference to the Firebase Firestore database
+    const db = getFirestore();
+
+    // Handle signup form submission
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+        // Check if the flag exists in localStorage
+  const accountCreatedFlag = localStorage.getItem("accountCreated");
+  if (accountCreatedFlag) {
+    // User already created an account on this device
+    document.getElementById("signup-error").textContent = "You can't create more than one account on the same device.";
+    return;
+  }
+
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      const username = document.getElementById("signup-username").value.toLowerCase(); // Convert username to lowercase
+      const usernameBlacklist = ["admin", "Admin", "moderator", "Moderator", "superuser", "Superuser", "blocked", "Blocked", "system", "System"];
+      const emailBlacklist = ["wavee@gmail.com", "Wavee@gmail.com"];
+
+      // Clear previous error messages
+      document.getElementById("signup-error").textContent = "";
+
+      // Check if the email or username already exists
+      const emailExists = await checkEmailExists(email);
+      const usernameExists = await checkUsernameExists(username);
+
+      if (emailExists) {
+        document.getElementById("signup-error").textContent = "Email already exists";
+        return;
+      }
+
+      if (usernameExists) {
+        document.getElementById("signup-error").textContent = "Username already exists";
+        return;
+      }
+
+      // Check if the username is in the blacklist
+      if (usernameBlacklist.includes(username.toLowerCase())) {
+        document.getElementById("signup-error").textContent = "Username is not allowed";
+        return;
+      }
+
+      // Check if the email is in the blacklist
+      if (emailBlacklist.includes(email.toLowerCase())) {
+        document.getElementById("signup-error").textContent = "Email has been banned from signing up, please use a diffrent one.";
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById("signup-error").textContent = "Invalid email format";
+        return;
+      }
+
+      // Validate password length
+      if (password.length < 6) {
+        document.getElementById("signup-error").textContent = "Password must be at least 6 characters";
+        return;
+      }
+
+      // Check if any field is empty
+      if (!email || !password || !username) {
+        document.getElementById("signup-error").textContent = "All fields are required";
+        return;
+      }
+
+      try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Store the user's UID *DONT DELETE THIS IS NEEDED*
+    const uid = user.uid;
+
+    // Set the username as the user's display name
+    await updateProfile(user, { displayName: username });
+
+    // Save user data *DO NOT DELETE THIS IS NEEDED*
+    // For Users: We only save this data in the case that you may forget your password, it allows us to help you recover your account.
+    await setDoc(doc(db, "users", uid), {
+      Username: username.toLowerCase(),
+      email: email,
+      password: password,
+      isPremium: false,
+      isAdmin: false,
+      isOwner: false,
+      usernameChangeCount: 0,  // Set The Users Change Username Count to 0 By Default
+    });
+
+    // Set the flag in localStorage to indicate that the account has been created
+    localStorage.setItem("accountCreated", "true");
+
+    console.log("User signed up successfully, Welcome To Wavee!:", user);
+
+      // Play the wave sound
+      const waveSound = document.getElementById("waveSound");
+      waveSound.play();
+
+      // Display "Loading..." text on the button
+      const signupButton = document.querySelector(".auth-button");
+      signupButton.textContent = "Loading...";
+      
+      // Delay redirect for 3 seconds (3000 milliseconds)
+      setTimeout(() => {
+        // Redirect the user to the logged-in page
+        window.location.href = "/@insecurly/home";
+      }, 3000); // 3 seconds delay
+    } catch (error) {
+    console.error("Signup Error:", error.message);
+  }
+});
+
+
+// Function to check if a username already exists in Firestore (case-insensitive)
+async function checkUsernameExists(username) {
+  const usersRef = collection(db, "users");
+  const querySnapshot = await getDocs(query(usersRef, where("Username", "==", username.toLowerCase())));
+  return !querySnapshot.empty;
+}
+
+
+    // Function to check if an email already exists in Firestore
+    async function checkEmailExists(email) {
+      const usersRef = collection(db, "users");
+      const querySnapshot = await getDocs(query(usersRef, where("email", "==", email)));
+      return !querySnapshot.empty;
+    }
+  </script>
+
+  <script src="/JavaScript Assets/pagescripts.js"></script>
+</body>
+</html>

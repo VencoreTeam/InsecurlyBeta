@@ -1,0 +1,64 @@
+.dark-mode {
+    background-color: #121212;
+    color: white;
+  }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #252525;
+        margin: 0;
+        padding: 0;
+      }
+  
+      .navbar {
+        background-color: #055bb7;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+  
+      .navbar-logo {
+        font-size: 24px;
+      }
+  
+      .account-menu {
+        position: relative;
+        cursor: pointer;
+      }
+  
+      .account-menu-options {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        display: none;
+        flex-direction: column;
+        width: 150px;
+      }
+  
+      .account-menu:hover .account-menu-options {
+        display: flex;
+      }
+  
+      .account-menu-option {
+        padding: 10px;
+        text-align: center;
+        color: #007bff;
+        transition: background-color 0.3s ease;
+      }
+  
+      .account-menu-option:hover {
+        background-color: #f4f4f4;
+      }
+      .color-option {
+        padding: 10px;
+        text-align: center;
+        color: #007bff;
+        transition: background-color 0.3s ease;
+      }
+      .color-option:hover {
+        background-color: #f4f4f4;
+      }

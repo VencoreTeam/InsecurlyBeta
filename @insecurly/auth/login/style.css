@@ -1,0 +1,243 @@
+/* Reset some default styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Basic styling */
+body {
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    font-size: 28px;
+    color: #1877f2;
+    font-weight: bold;
+}
+
+/* Main Content */
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 160px);
+    padding: 40px 20px;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #1877f2;
+}
+
+.auth-description {
+    color: #65676b;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #8e8e8e;
+}
+
+.auth-form input {
+    background-color: #f0f2f5;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    color: #1c1e21;
+    font-size: 16px;
+    padding: 14px 16px 14px 40px;
+    width: 100%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.auth-form input:focus {
+    border-color: #1877f2;
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+    outline: none;
+}
+
+.auth-button {
+    background-color: #1877f2;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+    background-color: #166fe5;
+}
+
+.forgot-password-link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.forgot-password-link a {
+    color: #1877f2;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password-link a:hover {
+    text-decoration: underline;
+}
+
+.already-account {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.already-account a {
+    color: #1877f2;
+    text-decoration: none;
+}
+
+.already-account bold {
+    font-weight: bold;
+}
+
+/* Error message */
+.error-message {
+    color: #ff4d4f;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Footer */
+.footer {
+    background-color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+    color: #65676b;
+    font-size: 14px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #65676b;
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background-color: #18191a;
+    color: #ffffff;
+}
+
+.dark-mode .navbar,
+.dark-mode .auth-card,
+.dark-mode .footer,
+.dark-mode .modal-content {
+    background-color: #242526;
+}
+
+.dark-mode .auth-description,
+.dark-mode .footer {
+    color: #b0b3b8;
+}
+
+.dark-mode .auth-form input {
+    background-color: #3a3b3c;
+    border-color: #3a3b3c;
+    color: #e4e6eb;
+}
+
+.dark-mode .auth-form input:focus {
+    border-color: #2d88ff;
+    box-shadow: 0 0 0 2px rgba(45, 136, 255, 0.2);
+}
+
+.dark-mode .auth-button {
+    background-color: #2d88ff;
+}
+
+.dark-mode .auth-button:hover {
+    background-color: #1877f2;
+}
+
+.dark-mode .forgot-password-link a,
+.dark-mode .already-account a {
+    color: #2d88ff;
+}

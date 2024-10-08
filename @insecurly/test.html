@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Switcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      transition: background-color 0.5s ease;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .theme-circle {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      margin: 0 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #lightTheme {
+      background-color: #f8f9fa;
+    }
+
+    #darkTheme {
+      background-color: #333;
+    }
+
+    #purpleTheme {
+      background-color: #800080;
+    }
+
+    #spaceTheme {
+      background-color: #000;
+      background-image: url('/Image Assets/space.png');
+      background-size: cover;
+    }
+
+    #goldTheme {
+      background-color: #ffd700;
+    }
+
+    #milesTheme {
+      background-color: #ff4500;
+    }
+
+    .selected {
+      border: 2px solid #007bff;
+    }
+
+    /* Dark theme styles */
+    body.dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+
+    body.dark-mode .container {
+      background-color: #444;
+      color: #fff;
+    }
+
+    body.dark-mode .theme-circle {
+      background-color: #555;
+    }
+
+    body.dark-mode .selected {
+      border: 2px solid #17a2b8;
+    }
+
+    /* Purple theme styles */
+    body.purple-mode {
+      background-color: #800080;
+      color: #fff;
+    }
+
+    body.purple-mode .container {
+      background-color: #9932CC;
+      color: #fff;
+    }
+
+    body.purple-mode .theme-circle {
+      background-color: #8A2BE2;
+    }
+
+    body.purple-mode .selected {
+      border: 2px solid #17a2b8;
+    }
+
+    /* Space theme styles */
+    body.space-mode {
+      background-color: #000;
+      background-image: url('/Image Assets/space.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      color: #fff;
+    }
+
+    /* Gold theme styles */
+    body.gold-mode {
+      background-color: #ffd700;
+      color: #000;
+    }
+
+    body.gold-mode .container {
+      background-color: #ffd700;
+      color: #000;
+    }
+
+    body.gold-mode .theme-circle {
+      background-color: #ffd700;
+    }
+
+    body.gold-mode .selected {
+      border: 2px solid #000;
+    }
+
+   /* Miles Morales theme styles */
+   body.miles-mode {
+   background-image: url('/Theme Assets/gwen&miles.png');
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-color: transparent;
+   color: #fff;
+   }
+
+
+
+    body.miles-mode .container {
+      background-image: url('/Theme Assets/miles-logo.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: #020202;
+      color: #fff;
+      opacity: 60%;
+    }
+
+    body.miles-mode .theme-circle {
+      background-color: #ff4500;
+    }
+
+    body.miles-mode .selected {
+      border: 2px solid #fff;
+    }
+
+    /* Media query for smaller screens to use background-size: contain */
+    @media screen and (max-width: 768px) {
+      body.space-mode {
+        background-size: contain;
+      }
+    }
+
+    body.space-mode .container {
+      background-color: #111;
+      color: #fff;
+    }
+
+    body.space-mode .theme-circle {
+      background-color: #444;
+    }
+
+    body.space-mode .selected {
+      border: 2px solid #17a2b8;
+    }
+
+    /* Popup styles */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    .popup button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Dark theme for the popup */
+    body.dark-mode .popup {
+      background-color: #333;
+      color: #fff;
+    }
+
+    button {
+      background-color: darkblue;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .Plus-Btn {
+      background-color: rgb(34, 34, 34);
+      color: white;
+      border-radius: 10px;
+    }
+
+    .Admin-Btn {
+      background-color: rgb(0, 0, 0);
+      color: white;
+      border-radius: 10px;
+    }
+
+    .Owner-Btn {
+      background-color: rgb(0, 0, 0);
+      color: white;
+      border-radius: 10px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container" id="themeContainer">
+    <h1>Theme Switcher</h1>
+    <p>Click the circles to switch between themes.</p>
+    <div id="lightTheme" class="theme-circle" onclick="previewTheme('light')"></div>
+    <div id="darkTheme" class="theme-circle" onclick="previewTheme('dark')"></div>
+    <div id="purpleTheme" class="theme-circle" onclick="previewTheme('purple')"></div>
+    <div id="spaceTheme" class="theme-circle" onclick="previewTheme('space')"></div>
+    <div id="goldTheme" class="theme-circle" onclick="previewTheme('gold')"></div>
+    <div id="milesTheme" class="theme-circle" onclick="previewTheme('miles')"></div>
+    <br>
+  <br>
+    <a href="/@insecurly/themes/plus"><button class="Plus-Btn">⭐ Plus Themes</button></a> &nbsp; <a href="/@insecurly/themes/admin"><button class="Admin-Btn">🛡️ Admin Themes</button></a>  &nbsp; <a href="/@insecurly/themes/owner"><button class="Owner-Btn">👑 Owner Themes</button></a>
+  </div>
+
+  <!-- Theme preview popup -->
+  <div id="themePreview" class="popup">
+    <h2>Theme Preview</h2>
+    <p>This is how your selected theme will look. Do you want to apply it?</p>
+    <button onclick="setTheme(previewThemeName)">Set Theme</button>
+    <button onclick="cancelPreview()">Cancel</button>
+  </div>
+
+  <script>
+    // Variable to store the preview theme name
+    let previewThemeName;
+
+    // Function to set the theme
+    function setTheme(theme) {
+      const body = document.body;
+      const container = document.getElementById('themeContainer');
+
+      // Remove existing theme classes
+      body.classList.remove('dark-mode', 'purple-mode', 'space-mode', 'gold-mode', 'miles-mode');
+
+      // Remove selected class from all circles
+      document.querySelectorAll('.theme-circle').forEach(circle => {
+        circle.classList.remove('selected');
+      });
+
+      // Apply the selected theme
+      switch (theme) {
+        case 'dark':
+          body.classList.add('dark-mode');
+          break;
+        case 'purple':
+          body.classList.add('purple-mode');
+          break;
+        case 'space':
+          body.classList.add('space-mode');
+          break;
+        case 'gold':
+          body.classList.add('gold-mode');
+          break;
+        case 'miles':
+          body.classList.add('miles-mode');
+          break;
+        // Default to light theme
+        default:
+          break;
+      }
+
+      // Save the theme preference in localStorage
+      localStorage.setItem('theme', theme);
+
+      // Add selected class to the clicked circle
+      document.getElementById(`${theme}Theme`).classList.add('selected');
+
+      // Close the theme preview popup
+      closePreview();
+    }
+
+    // Function to preview the theme
+    function previewTheme(theme) {
+      const popup = document.getElementById('themePreview');
+      previewThemeName = theme;
+
+      // Set the background color and text color based on the selected theme
+      switch (theme) {
+        case 'dark':
+          popup.style.backgroundColor = '#333'; // Set background color to transparent
+          popup.style.color = '#fff';
+          break;
+        case 'purple':
+          popup.style.backgroundImage = 'none'; // Reset background image
+          popup.style.backgroundColor = '#800080';
+          popup.style.color = '#fff';
+          break;
+        case 'space':
+          popup.style.backgroundImage = 'url("/Image Assets/space.png")';
+          popup.style.backgroundColor = '#000';
+          popup.style.color = '#fff';
+          break;
+        case 'gold':
+          popup.style.backgroundColor = '#ffd700';
+          popup.style.color = '#000';
+          break;
+        case 'miles':
+          popup.style.backgroundImage = 'url("/Theme Assets/miles-bg.jpg")';
+          popup.style.backgroundColor = '#ff4500';
+          popup.style.color = '#fff';
+          break;
+        // Default to light theme
+        default:
+          popup.style.backgroundImage = 'none'; // Reset background image
+          popup.style.backgroundColor = '#fff';
+          popup.style.color = '#000';
+          break;
+      }
+
+      // Show the theme preview popup
+      popup.style.display = 'block';
+    }
+
+    // Function to close the theme preview popup
+    function closePreview() {
+      const popup = document.getElementById('themePreview');
+      popup.style.display = 'none';
+
+      // Reset background image when closing the preview
+      popup.style.backgroundImage = 'none';
+    }
+
+    // Function to cancel the theme preview
+    function cancelPreview() {
+      closePreview();
+    }
+
+    // Check for theme preference in localStorage on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      const savedTheme = localStorage.getItem('theme');
+      setTheme(savedTheme || 'light');
+    });
+  </script>
+
+</body>
+
+</html>

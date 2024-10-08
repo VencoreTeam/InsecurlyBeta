@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/Image Assets/InsecurlyLogo.png">
+  <title>Insecurly | Home</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/CSS Assets/loading-site.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Add styles for the user profile picture */
+    #user-profile-picture {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    #error {
+        display: none;
+        color: red;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: rgba(255, 0, 0, 0.1);
+    }
+    
+    #draggable {
+        display: none;
+        background-color: rgba(1, 42, 192, 0.5);
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        cursor: move;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    #draggable:hover {
+        background-color: rgba(1, 42, 192, 0.7);
+    }
+
+    .os-btn {
+        background-color: rgba(0, 55, 255, 0.5);
+        color: white;
+        padding: 12px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .os-btn:hover {
+        background-color: rgba(0, 55, 255, 0.7);
+        transform: translateY(-2px);
+    }
+    
+    .shown {
+        display: inline-block !important;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: rgb(1, 9, 36);
+        border: 1px solid transparent;
+        border-radius: 12px;
+        display: flex;
+        gap: 5px;
+        justify-content: space-between;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body.miles-mode .container {
+        background-color: rgba(255, 0, 0, 0.2);
+        color: white;
+    }
+
+    .item {
+        flex-basis: calc(33.333% - 20px);
+        margin-bottom: 20px;
+        border: 1px solid rgba(1, 42, 192, 0.326);
+        padding: 15px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    body.miles-mode .item {
+        border-color: rgba(255, 255, 255, 0.326);
+    }
+
+    .item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+
+        .item {
+            flex-basis: calc(50% - 10px);
+        }
+
+        .os-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .item {
+            flex-basis: 100%;
+        }
+
+        #draggable {
+            padding: 10px;
+            font-size: 14px;
+        }
+    }
+
+    .account-menu {
+    position: relative;
+  }
+
+  .premium-status {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 20px;
+    z-index: 1; /* Ensure it appears in front of other elements */
+  }
+  
+  .premium-status-container {
+      padding: 5px 10px;
+      border-radius: 20px;
+      z-index: 2;
+      color: #fff;
+    }
+
+    .premium-status-container.basic {
+      background-color: #3498db;
+    }
+
+    .premium-status-container.plus {
+      background-color: #ffd700;
+    }
+
+    #overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent black overlay */
+  z-index: 1000; /* higher z-index than the popup */
+}
+
+#discord-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background-color: #1b1b1b;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1001; /* higher z-index than the overlay */
+}
+
+#discord-popup p {
+  margin: 0;
+}
+
+#close-popup {
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #fff;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div style="text-align: center;">
+        <h1>Insecurly Inc.</h1>
+      <img src="/Image Assets/InsecurlyLogo.png" width="100" height="100" class="loading-logo">
+      <div id="randomTip" style="color: white; margin-top: 10px;"></div>
+      <div id="Version" style="color: white; margin-top: 10px;">Version v1.0.0</div>
+    </div>
+</div>
+
+  <nav class="navbar">
+    <div class="navbar-logo"><img src="/Image Assets/InsecurlyLogo.png" width="30" height="30">Home</div>
+    <li><a href="/community"></a></li>
+    
+    <div class="account-menu">
+      <div class="account-menu">
+        
+      &nbsp;
+      &nbsp;
+      
+        <span id="notification-icon" class="notification-icon">
+            <span id="premium-status-wrapper"></span> <!-- New span element -->
+
+            
+          <i class="fas fa-bell" aria-hidden="true"></i>
+        </span>
+        <img id="user-profile-picture" src="#" alt="Profile Picture">
+        <span id="user-username"></span> &#9662;
+        <br>
+        <div class="account-menu-options">
+          <div class="account-menu-option" id="account-settings-option">Account Settings</div>
+          <div class="account-menu-option" id="plan-manager-option">Plan Manager</div>
+          <div class="account-menu-option" id="redeem-page-option">Promocodes</div>
+          <div class="account-menu-option" id="panel-option">Admin Panel</div>
+
+          <div class="account-menu-option" id="logout-option">Logout</div>
+        </div>
+      </div>
+      <div class="notification-menu" id="notification-menu">
+        <!-- Notifications will be displayed here -->
+      </div>      
+    </div>
+  </nav>
+<br>
+  <div class="system-notification" style="display: none;">
+    <p><strong>System:</strong> Welcome to the new and improved homepage!</p>
+</div>
+<br>
+
+<div class="top-users">
+<br>
+   <br>
+   <h2>Methods - Beta</h2>
+   <div class="container">
+    <div class="grid">
+      <div class="item">
+        <img style="background-color: rgba(250, 250, 250, 0.945); border-radius: 10px;" src="/Image Assets/nmslogo.png" width="100" height="100" alt="Item 1">
+        <h3>Norview Middle Methods</h3>
+        <p>The Best Methods For NMS.</p>
+        <div id="error"></div>
+        <a href="/@insecurly/home/methods/nms">
+          <div class="os-btn" draggable="false">Securly Methods</div>
+        </a>
+      </div>
+      <!-- Repeat for other items -->
+    </div>
+  </div>
+  
+  </div>
+  <br>
+     <br>
+</div>
+
+<br>
+
+
+<br>
+
+</div>
+
+
+<br>
+
+<div class="lb-container" style="display: none;">
+  <br>
+  <h1>Top 10 Richest Users</h1>
+  <ol id="leaderboard"></ol>
+  </div>
+
+      <!-- Discord-like popup -->
+  <div id="discord-popup">
+    <span id="close-popup">&times;</span>
+    <p><strong>New Update!</strong></p>
+    <p>Version 1.1.0</p>
+    <ul>
+      <li>- Fixed Free Access Bug</li>
+      <li>- Improved The UI</li>
+      <li>- Improved Page Loading</li>
+      <li>- Added Profile Tags Staff: (Owner, Admin) | Buyers: (Plus, Basic)</li>
+
+
+      <!-- Add more update details as needed -->
+    </ul>
+  </div>
+
+  <script>
+    document.getElementById('draggableButton').addEventListener('dragstart', function (e) {
+      e.dataTransfer.setData('text/plain', 'https://your-link-here.com');
+    });
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+    import { doc, setDoc, getDoc, FieldValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+   // Insecurly CONFIG
+   const firebaseConfig = {
+  apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+  authDomain: "insecurly.firebaseapp.com",
+  databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+  projectId: "insecurly",
+  storageBucket: "insecurly.appspot.com",
+  messagingSenderId: "720308147008",
+  appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+  measurementId: "G-L1KYG6M7WZ"
+};
+    // Initialize Firebase app
+    const app = initializeApp(firebaseConfig);
+  
+    // Reference to the Firebase Authentication service
+    const auth = getAuth();
+  
+    const db = getFirestore();
+
+    const storage = getStorage(app);
+  
+  // ...
+
+  onAuthStateChanged(auth, async (user) => {
+  const userUsername = document.getElementById("user-username");
+  const userProfilePicture = document.getElementById("user-profile-picture");
+  const accountSettingsOption = document.getElementById("account-settings-option");
+  const PlanPageOption = document.getElementById("plan-manager-option");
+  const RedeemPageOption = document.getElementById("redeem-page-option");
+  const AdminPanelOption = document.getElementById("panel-option");
+  const logoutOption = document.getElementById("logout-option");
+  const premiumStatusWrapper = document.getElementById("premium-status-wrapper");
+
+  if (user) {
+    // User is logged in
+
+    // Check the "isPremium" field in the Firestore document
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    const isPremium = userDoc.data() && userDoc.data().isPremium;
+    if (isPremium === false) {
+
+    window.location.href = "/@insecurly/home/basic"; // Redirect to the "/code" page
+    return;
+    }
+
+    const isAdmin = userDoc.data() && userDoc.data().isAdmin; // Add this line
+    const isOwner = userDoc.data() && userDoc.data().isOwner; // Add this line
+
+     if (isAdmin) {
+      // If the user is an admin, display "Admin" instead of the premium status
+      premiumStatusWrapper.textContent = 'Admin';
+      premiumStatusWrapper.style.backgroundColor = '#000';
+      premiumStatusWrapper.style.color = '#fff';
+      premiumStatusWrapper.style.borderRadius = '20px';
+      premiumStatusWrapper.style.padding = '5px 10px';
+      premiumStatusWrapper.style.zIndex = '1';
+      premiumStatusWrapper.style.backgroundImage = 'url("https://t3.ftcdn.net/jpg/02/95/15/72/240_F_295157232_A3vxSfsPOwO97ozgUr6U9po7vFIrGajG.webp")';
+      premiumStatusWrapper.style.backgroundSize = 'cover';
+    } else if (isOwner) {
+      // If the user is an owner, display "Owner" instead of the premium status
+      premiumStatusWrapper.textContent = 'Insecurly Owner';
+      premiumStatusWrapper.style.backgroundColor = '#000';
+      premiumStatusWrapper.style.color = '#fff';
+      premiumStatusWrapper.style.borderRadius = '20px';
+      premiumStatusWrapper.style.padding = '5px 10px';
+      premiumStatusWrapper.style.zIndex = '1';
+      premiumStatusWrapper.style.backgroundImage = 'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5c5ybpEprgTQRz-_gMNmsTpqXjY3VQ0tClOT6tZMd5KNx7xmEP6PHD-KbIAfW0ma2AOs&usqp=CAU")'; // Update with the appropriate image URL
+      premiumStatusWrapper.style.backgroundSize = 'cover';
+    } else {
+      // Display premium status
+      const premiumStatusContainer = document.createElement('div');
+      premiumStatusContainer.classList.add('premium-status-container');
+
+      // Set text content based on premium status
+      premiumStatusContainer.textContent = isPremium ? 'Plus Plan' : 'Basic Plan';
+
+      // Add or remove classes based on premium status
+      premiumStatusContainer.classList.remove('basic', 'plus');
+      premiumStatusContainer.classList.add(isPremium ? 'plus' : 'basic');
+
+      // Set background color based on premium status
+      premiumStatusContainer.style.backgroundColor = isPremium ? '#ffd700' : '#3498db';
+
+      // Append premium status to the account menu
+      const accountMenu = document.querySelector('.account-menu');
+      accountMenu.appendChild(premiumStatusContainer);
+    }
+
+    // Display the username or fallback to "User" if not set
+    userUsername.textContent = user.displayName || "User";
+
+    // Display the user's profile picture or a placeholder
+    userProfilePicture.src = user.photoURL || "/Image Assets/default-pfp.png";
+
+    // ...
+
+    // Redirect to account settings page when clicked
+    accountSettingsOption.addEventListener("click", () => {
+      window.location.href = "/@insecurly/settings";
+    });
+
+    // Redirect to account settings page when clicked
+    PlanPageOption.addEventListener("click", () => {
+      window.location.href = "/@insecurly/manage-plan";
+    });
+
+    // Redirect to account settings page when clicked
+    RedeemPageOption.addEventListener("click", () => {
+      window.location.href = "/@insecurly/redeem";
+    });
+
+        // Redirect to account settings page when clicked
+        AdminPanelOption.addEventListener("click", () => {
+      window.location.href = "/@insecurly/admin-panel";
+    });
+
+    // Logout when logout option is clicked
+    logoutOption.addEventListener("click", () => {
+      signOut(auth)
+        .then(() => {
+          console.log("User logged out.");
+          window.location.href = "/@insecurly/auth/login"; // Redirect to the login page
+        })
+        .catch((error) => {
+          console.error("Logout error:", error.message);
+        });
+    });
+  } else {
+    // User is not logged in
+    window.location.href = "/@insecurly/auth/login"; // Redirect to the login page
+  }
+});
+
+// ...
+
+  
+    // Function to toggle the notification container
+    function toggleNotificationContainer(e) {
+      const notificationMenu = document.getElementById("notification-menu");
+      if (notificationMenu.style.display === "block") {
+        notificationMenu.style.display = "none";
+      } else {
+        notificationMenu.style.display = "block";
+      }
+      e.stopPropagation(); // Stop event propagation to prevent the account menu from opening
+    }
+  
+    // Add an event listener to the bell icon
+    const notificationIcon = document.getElementById("notification-icon");
+    notificationIcon.addEventListener("click", toggleNotificationContainer);
+  
+    // Close notification menu when clicking anywhere outside
+    document.addEventListener("click", (e) => {
+      const notificationMenu = document.getElementById("notification-menu");
+      if (notificationMenu.style.display === "block") {
+        notificationMenu.style.display = "none";
+      }
+    });
+  
+    // Function to display a notification in the container
+    function displayNotification(sender, text, timestamp) {
+      const notificationMenu = document.getElementById("notification-menu");
+      const notificationItem = document.createElement("div");
+      notificationItem.className = "notification-menu-item";
+  
+      // Create elements to display sender, text, and timestamp
+      const senderElement = document.createElement("div");
+      senderElement.textContent = `@${sender}`;
+      const textElement = document.createElement("div");
+      textElement.textContent = text;
+      const timestampElement = document.createElement("div");
+      timestampElement.textContent = `${timestamp}`;
+  
+      // Append sender, text, and timestamp to the notification item
+      notificationItem.appendChild(senderElement);
+      notificationItem.appendChild(textElement);
+      notificationItem.appendChild(timestampElement);
+  
+      notificationMenu.appendChild(notificationItem);
+    }
+  
+    // Function to fetch and display notifications
+    function fetchAndDisplayNotifications() {
+      // Define a reference to the Firestore collection containing notifications
+      const notificationsCollection = collection(db, "notifications");
+  
+      // Create a query to order notifications by timestamp in descending order
+      const notificationsQuery = query(notificationsCollection, orderBy("timestamp", "desc"));
+  
+      // Get the notification container element
+      const notificationMenu = document.getElementById("notification-menu");
+  
+      // Listen for changes in the Firestore collection
+      onSnapshot(notificationsQuery, (snapshot) => {
+        notificationMenu.innerHTML = ''; // Clear existing notifications
+  
+        snapshot.forEach((doc) => {
+          const notification = doc.data();
+          displayNotification(notification.sender, notification.text, notification.timestamp);
+        });
+      });
+    }
+  
+    // Add an event listener to fetch and display notifications when the page loads
+    window.addEventListener("load", fetchAndDisplayNotifications);
+  </script>
+    <script src="/JavaScript Assets/pagescripts.js"></script>
+    <script src="/JavaScript Assets/loading-site.js"></script>
+    
+</body>
+</html>

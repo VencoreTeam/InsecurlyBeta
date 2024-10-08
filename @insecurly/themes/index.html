@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Switcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      transition: background-color 0.5s ease;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #000020;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #010160;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      color: white;
+    }
+
+    .theme-circle {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      margin: 0 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Light theme styles */
+    #lightTheme {
+      background-color: #064381;
+    }
+
+    /* Dark theme styles */
+    #darkTheme {
+      background-color: #333;
+    }
+
+    /* Space theme styles */
+    #spaceTheme {
+      background-color: #000;
+      background-image: url('/Theme Assets/space.png');
+      background-size: cover;
+    }
+
+    /* Gold theme styles */
+    #goldTheme {
+      background-color: #ffd700;
+    }
+
+    /* Miles Morales theme styles */
+    #milesTheme {
+      background-image: url('/Theme Assets/gwen&miles.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .selected {
+      border: 2px solid #007bff;
+    }
+
+    /* Dark theme styles */
+    body.dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+
+    body.dark-mode .container {
+      background-color: #444;
+      color: #fff;
+    }
+
+    body.dark-mode .theme-circle {
+      background-color: #555;
+    }
+
+    body.dark-mode .selected {
+      border: 2px solid #17a2b8;
+    }
+
+    /* Space theme styles */
+    body.space-mode {
+      background-color: #000;
+      background-image: url('/Theme Assets/space.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #fff;
+    }
+
+    /* Gold theme styles */
+    body.gold-mode {
+      background-color: #ffd700;
+      color: #000;
+    }
+
+    body.gold-mode .container {
+      background-color: #ffd700;
+      color: #000;
+    }
+
+    body.gold-mode .theme-circle {
+      background-color: #ffd700;
+    }
+
+    body.gold-mode .selected {
+      border: 2px solid #000;
+    }
+
+    /* Miles Morales theme styles */
+    body.miles-mode {
+      background-image: url('/Theme Assets/gwen&miles.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: transparent;
+      color: #fff;
+    }
+
+    body.miles-mode .container {
+      background-image: url('/Theme Assets/miles-logo.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: #020202;
+      color: #fff;
+      opacity: 60%;
+    }
+
+    body.miles-mode .theme-circle {
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    body.miles-mode .selected {
+      border: 2px solid #fff;
+    }
+
+    /* Media query for smaller screens to use background-size: contain */
+    @media screen and (max-width: 768px) {
+      body.space-mode {
+        background-size: contain;
+      }
+    }
+
+    body.space-mode .container {
+      background-color: #111;
+      color: #fff;
+    }
+
+    body.space-mode .theme-circle {
+      background-color: #444;
+    }
+
+    body.space-mode .selected {
+      border: 2px solid #17a2b8;
+    }
+
+    /* Popup styles */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    .popup button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Dark theme for the popup */
+    body.dark-mode .popup {
+      background-color: #333;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container" id="themeContainer">
+    <h1>Theme Switcher</h1>
+    <p>Click the circles to switch between themes.</p>
+    <div id="lightTheme" class="theme-circle" onclick="previewTheme('light')"></div>
+    <div id="darkTheme" class="theme-circle" onclick="previewTheme('dark')"></div>
+    <br>
+    <br>
+    <a href="/@insecurly/themes/plus"><button class="Plus-Btn">⭐ Plus Themes</button></a> &nbsp; <a href="/@insecurly/themes/admin"><button class="Admin-Btn">🛡️ Admin Themes</button></a>  &nbsp; <a href="/@insecurly/themes/owner"><button class="Owner-Btn">👑 Owner Themes</button></a>
+  </div>
+
+  <!-- Theme preview popup -->
+  <div id="themePreview" class="popup">
+    <h2>Theme Preview</h2>
+    <p>This is how your selected theme will look. Do you want to apply it?</p>
+    <button onclick="setTheme(previewThemeName)">Set Theme</button>
+    <button onclick="cancelPreview()">Cancel</button>
+  </div>
+
+  <script src="/JavaScript Assets/pagescripts.js"></script>
+
+
+</body>
+
+</html>

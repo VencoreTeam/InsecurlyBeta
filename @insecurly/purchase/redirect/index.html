@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/Image Assets/InsecurlyLogo.png">
+
+  <title>Insecurly | Purchase</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #0e0e0e;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .subscription-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .plan {
+      flex: 1;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      background-size: 200% 200%;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      animation: pulsate 1.5s infinite;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+
+    .free-plan {
+      background: linear-gradient(45deg, #4e54c8, #8f94fb);
+      animation: gradientChange 3s infinite;
+    }
+
+    .premium-plan {
+      background: url('https://t3.ftcdn.net/jpg/02/95/15/72/240_F_295157232_A3vxSfsPOwO97ozgUr6U9po7vFIrGajG.webp');
+     /* background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045); */
+      animation: gradientChange 3s infinite reverse;
+    }
+
+    .suggested-label {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: black;
+      color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .plan:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .plan h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .features {
+      margin-top: 20px;
+      list-style: none;
+      padding: 0;
+    }
+
+    .features li {
+      margin: 10px 0;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #fff;
+      color: #333;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+    }
+
+    .cta-button:hover {
+      background: #333;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    @keyframes gradientChange {
+      0% {
+        background-position: 0% 0%;
+      }
+      100% {
+        background-position: 200% 200%;
+      }
+    }
+
+    @keyframes pulsate {
+      0%, 100% {
+        background-image: linear-gradient(45deg, #424242, #303030);
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      50% {
+        background-image: linear-gradient(45deg, #303030, #424242);
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      }
+    }
+
+    /* Popup styles */
+.popup-container {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+
+.popup-content {
+  background: #111111;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Close button */
+.popup-content button {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.popup-content button:hover {
+  background: #297fb8;
+}
+  </style>
+</head>
+<body>
+  <div class="subscription-container">
+    <div class="plan premium-plan">
+      <h2>Plus Membership Required</h2>
+      <p>You must purchase a Plus Membership to access this page.</p>
+      <a href="#" class="cta-button" onclick="showPopup('premium')">Subscribe Now</a>
+    </div>
+  </div>
+</body>
+</html>
+
+
+<div class="popup-container" id="popup">
+    <button class="cta-button" onclick="closePopup()">Close</button>
+    <div class="popup-content" id="popup-content">
+        
+      <!-- Popup content goes here -->
+    </div>
+  </div>
+
+  
+  <script>
+    function showPopup(plan) {
+      const popup = document.getElementById('popup');
+      const popupContent = document.getElementById('popup-content');
+
+      // Customize popup content based on the plan
+      if (plan === 'free') {
+        popupContent.innerHTML = '<h2>Free Plan</h2><p>You already own this plan by default.</p>';
+      } else if (plan === 'premium') {
+        popupContent.innerHTML = '<h2>Plus Plan</h2><p>To Purchase The Plus Plan Please Attempt To Find One Of Our Anonymous Admins In Your School, if there is any...</p><br><p>Note: Purchases Can Only Be Made In Person.</p>';
+      }
+
+      popup.style.display = 'flex';
+    }
+
+    function closePopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'none';
+    }
+  </script>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/Image Assets/InsecurlyLogo.png">
+  <title>Insecurly | Admin</title>
+    <link rel="stylesheet" href="style.css">
+  <style>
+
+     .dark-mode {
+        color: white;
+        background-color: #333;
+     }
+
+    /* Add styles for the user profile picture */
+    #user-profile-picture {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .account-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .account-menu-options {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 5px;
+      width: max-content;
+    }
+
+    .account-menu:hover .account-menu-options {
+      display: block;
+    }
+
+    .status-message {
+      margin-top: 10px;
+      color: #00b7ff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1f1f1f;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ffffff;
+    }
+
+    #notification-form {
+      background-color: #272727;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px auto;
+      max-width: 400px;
+    }
+
+  .dark-mode  #notification-form {
+      background-color: #171717;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      margin: 20px auto;
+      max-width: 400px;
+    }
+
+    #discord-announce-form {
+      background-color: #272727;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px auto;
+      max-width: 400px;
+    }
+
+    .dark-mode #discord-announce-form {
+      background-color: #171717;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      margin: 20px auto;
+      max-width: 400px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: white;
+    }
+
+    textarea {
+      width: 90%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      resize: none;
+      color: wheat;
+      background-color: transparent;
+    }
+
+    .dark-mode textarea {
+      width: 90%;
+      padding: 10px;
+      border: 1px solid #333333b2;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      resize: none;
+      background-color: transparent;
+    }
+    
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    a {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    a:hover {
+      background-color: #0056b3;
+    }
+
+       /* Style for the admin login form */
+       #admin-login-form {
+      max-width: 300px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #171717;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #admin-login-form label,
+    #admin-login-form button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    #admin-login-form label {
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    #admin-login-form input {
+      padding: 10px;
+      border: 1px solid #1e1e1e;
+      border-radius: 4px;
+      width: auto;
+      background-color: #333;
+    }
+
+    #admin-login-form button {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #admin-login-form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Hide the admin forms by default */
+    #notification-form,
+    #discord-announce-form {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-logo"><b><img src="/Image Assets/InsecurlyLogo.png" width="30" height="30">Insecurly</b> Admin Panel</div>
+    <div class="account-menu">
+      <a href="/@insecurly/home">
+       Home
+        </a>
+      <div class="account-menu-options">
+        <div class="account-menu-option" id="account-settings-option">Account Settings</div>
+        <div class="account-menu-option" id="logout-option">Logout</div>
+        <div class="color-option">
+          <label class="dark-mode-toggle">
+            <input type="checkbox" id="dark-mode-toggle">
+            Darkmode
+          </label>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  <form id="notification-form">
+    <a href="https://gitpod.io/start/#waveeteam-insecurlypane-v53ijo9r3po">
+    User Management Panel
+    </a>
+<br>
+
+<br>
+    <label for="notification-text">Notification Sender</label>
+    <textarea id="notification-text" rows="4" cols="50" maxlength="151" placeholder="Enter Notification..." required></textarea>
+    <div class="status-message" id="status-message"></div>
+<br>
+    <button type="submit">Send Notification</button>
+  </form>
+
+  <form id="discord-announce-form">
+    <form>
+      <label for="message-input">Discord Announcement Sender</label>
+      <br>
+      <textarea id="message-input" name="message-input" placeholder="Enter DIscord Annoncement..." required></textarea>
+      <br>
+      <button id="send-button">Announce</button>
+    </form>
+  </div>
+
+  <form id="admin-login-form"> <!-- Added an admin login form -->
+    <label for="admin-pin">Enter PIN to Access Admin Panel:</label>
+    <input type="password" id="admin-pin" placeholder="PIN" required>
+    <br>
+  <br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    // Your Firebase configuration
+   // Insecurly CONFIG
+   const firebaseConfig = {
+  apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+  authDomain: "insecurly.firebaseapp.com",
+  databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+  projectId: "insecurly",
+  storageBucket: "insecurly.appspot.com",
+  messagingSenderId: "720308147008",
+  appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+  measurementId: "G-L1KYG6M7WZ"
+};
+
+    // Initialize Firebase app
+    const app = initializeApp(firebaseConfig);
+
+    // Reference to the Firebase Authentication service
+    const auth = getAuth();
+
+    // Reference to the Firebase Firestore database
+    const db = getFirestore();
+
+
+    // Notifcations JS Code Start
+
+    // Get the notification form element and status message element
+    const notificationForm = document.getElementById('notification-form');
+    const notificationText = document.getElementById('notification-text');
+    const statusMessage = document.getElementById('status-message');
+
+    notificationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const user = getAuth().currentUser;
+
+      if (user) {
+        const adminNotification = {
+          text: notificationText.value,
+          sender: user.displayName,
+          timestamp: new Date().toLocaleString()
+        };
+
+        const notificationsCollection = collection(db, 'notifications');
+
+        addDoc(notificationsCollection, adminNotification)
+          .then(() => {
+            notificationText.value = '';
+            statusMessage.textContent = 'Notification sent successfully.';
+          })
+          .catch((error) => {
+            console.error('Error sending notification:', error);
+            statusMessage.textContent = 'Error sending notification.';
+          });
+      } else {
+        statusMessage.textContent = 'You must be logged in as an admin to send notifications.';
+      }
+    });
+// Notifcations JS Code End
+
+
+// Function to handle admin panel access
+document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const enteredPin = document.getElementById('admin-pin').value;
+      const requiredPin = '6969'; // Change this to your desired PIN
+
+      if (enteredPin === requiredPin) {
+        // Correct PIN entered, grant access to admin features
+        document.getElementById('notification-form').style.display = 'block'; // Show the notification form
+        document.getElementById('discord-announce-form').style.display = 'block'; // Show the discord announcement form
+        document.getElementById('admin-login-form').style.display = 'none'; // Hide the PIN form
+      } else {
+        // Incorrect PIN entered, display an error message
+        alert('Incorrect PIN.');
+      }
+    });
+
+   // Annoncement WebHook JS Code Start
+
+   // app.js
+const webhookUrl = 'https://discord.com/api/webhooks/1155583261553197136/G1HWNjgbcE3ibBs-U1z6CBCYENHcI5cfcj96YqtJk4RFAYMHWwcFSW8YcIJlRUFKOrLl'; // replace WEBHOOK_ID and TOKEN with your values
+const sendButton = document.getElementById('send-button');
+const messageInput = document.getElementById('message-input');
+
+sendButton.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  const message = `||<@&1150171699044696137>||\n\n${messageInput.value}`;
+  const data = JSON.stringify({ content: message });
+
+  fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: data,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  // Clear the message input field after the message is sent
+  messageInput.value = '';
+});
+// Announcement WebHook JS Code Start
+
+  </script>
+</body>
+</html>
+<script src="/JavaScript Assets/pagescripts.js"></script>
