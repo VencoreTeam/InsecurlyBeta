@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css"> <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Font Awesome for icons -->
+  <!-- Firebase JavaScript SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <style>
+
+  </style>
+</head>
+<body>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <img src="/Image Assets/InsecurlyLogo.png" alt="Logo">
+    </div>
+    <ul id="tabList">
+      <!-- Tabs will be added here dynamically -->
+    </ul>
+  </div>
+  <div class="main-content">
+    <nav class="top-nav">
+      <div class="user-info">
+        <img id="user-profile-picture" src="#" alt="Profile Picture" class="mod-pic">
+        <div class="username-moderator-container">
+          <span id="user-username" class="mod-username"></span>
+          <span class="moderator-tag">⚒️ Insecurly Staff</span>
+        </div>
+      </div>
+      <div style="display: none;" class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+    </nav>
+    <div id="dashboard" class="tab-content">
+      <h1>Dashboard</h1>
+      <div class="stats-container">
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <h3>Total Users</h3>
+          <p id="totalUsers">Loading...</p>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-flag"></i>
+          <h3>Reported Content</h3>
+          <p id="reportedContent">Loading...</p>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-dollar-sign"></i>
+          <h3>Paid Users</h3>
+          <p id="verifiedUsers">Loading...</p>
+        </div>
+      </div>
+      <div class="dashboard-section">
+        <h2>Recent Activity</h2>
+        <ul id="recentActivity" class="activity-list">
+          <!-- Recent activity items will be added here dynamically -->
+        </ul>
+      </div>
+    </div>
+    <!-- Other tab contents -->
+    <div id="adminsec" class="tab-content" style="display: none;">
+      <form id="notification-form">
+        <a href="https://gitpod.io/start/#waveeteam-insecurlypane-v53ijo9r3po">
+        Notification Panel
+        </a>
+    <br>
+    
+    <br>
+        <label for="notification-text">Notification Sender</label>
+        <textarea id="notification-text" rows="4" cols="50" maxlength="151" placeholder="Enter Notification..." required></textarea>
+        <div class="status-message" id="status-message"></div>
+    <br>
+        <button type="submit">Send Notification</button>
+      </form>
+    </div>
+    <div id="reports" class="tab-content" style="display: none;">
+      <iframe style="width: 100%; height: 400px; border: none;" src="/reports"></iframe>
+    </div>
+    <div id="users" class="tab-content" style="display: none;">
+      <h1>Users</h1>
+      <div class="dashboard-section">
+          <h1>Manage Users Status</h1>
+          <hr>
+          <h3>Premium Status</h3>
+          <p>Give, or take away premium status from users.</p>
+          <label for="usernameInput">Username</label>
+          <input type="text" id="usernameInput" name="usernameInput" placeholder="Username Here..." required oninput="document.getElementById('error').innerText = ''">
+          <br><br>
+          <button onclick="PremiumUsername()">Give Premium</button>
+          <button onclick="unPremiumUsername()">Take Away Premium</button>
+          <div id="error" class="error"></div>
+  </div>
+
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const terminalOverlay = document.getElementById('terminalOverlay');
+    const terminalInput = document.getElementById('terminalInput');
+    terminalOverlay.style.display = 'flex';
+
+    terminalInput.addEventListener('keyup', ({key}) => {
+      if (key === 'Enter') {
+        const input = terminalInput.value.trim().toLowerCase();
+        if (input === 'admin') {
+          simulateLoading();
+          terminalInput.style.display = 'none';
+        } else {
+          document.getElementById('terminalError').textContent = 'Invalid command.';
+        }
+      }
+    });
+  });
+
+  function simulateLoading() {
+    const content = document.querySelector('.terminal-content');
+    const sequence = [
+      'Checking Panel Access...',
+      'Access Approved...',
+      'Fetching Mod Details...',
+      'Initializing Admin Interface...',
+      'Loading Complete. Welcome to the Admin Panel!'
+    ];
+    let i = 0;
+    const interval = setInterval(() => {
+      const text = document.createElement('p');
+      text.textContent = sequence[i];
+      content.appendChild(text);
+      content.scrollTop = content.scrollHeight;
+      if (++i >= sequence.length) {
+        clearInterval(interval);
+        document.getElementById('terminalOverlay').style.display = 'none';
+      }
+    }, 1500);
+  }
+
+  const tabs = [
+    { name: 'Dashboard', contentId: 'dashboard', icon: 'chart-bar' },
+    { name: 'Users', contentId: 'users', icon: 'users' },
+    { name: 'Reports', contentId: 'reports', icon: 'flag' },
+    { name: 'Adminsec', contentId: 'adminsec', icon: 'users' }
+  ];
+
+  function createTabs() {
+    const list = document.getElementById('tabList');
+    list.innerHTML = '';
+    tabs.forEach(tab => {
+      const li = document.createElement('li');
+      li.innerHTML = `<i class="fas fa-${tab.icon}"></i>${tab.name}`;
+      li.onclick = () => changeTab(tab.contentId);
+      list.appendChild(li);
+    });
+  }
+
+  function changeTab(id) {
+    document.querySelectorAll('.tab-content')
+      .forEach(tc => tc.style.display = tc.id === id ? 'block' : 'none');
+
+    document.querySelectorAll('.sidebar ul li').forEach(t => {
+      t.classList.toggle('active', 
+        t.textContent.trim() === tabs.find(tab => tab.contentId === id).name);
+    });
+  }
+
+  async function updateDashboardStats() {
+    try {
+      const [premium, total] = await Promise.all([
+        db.collection('users').where('isPremium', '==', true).get(),
+        db.collection('users').get()
+      ]);
+
+      document.getElementById('verifiedUsers').textContent = premium.size;
+      document.getElementById('totalUsers').textContent = total.size;
+      document.getElementById('reportedContent').textContent = '250';
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+      ['verifiedUsers', 'totalUsers', 'totalPosts'].forEach(id => 
+        document.getElementById(id).textContent = 'Error'
+      );
+    }
+  }
+
+  function addRecentActivityItems() {
+    const list = document.getElementById('recentActivity');
+    [
+      { type: 'user', text: 'Nothing New' },
+    ].forEach(activity => {
+      const li = document.createElement('li');
+      const icon = {
+        user: 'user-plus',
+        post: 'star', 
+        report: 'exclamation-triangle',
+        verify: 'check-circle'
+      }[activity.type] || 'info-circle';
+      li.innerHTML = `<i class="fas fa-${icon}"></i> ${activity.text}`;
+      list.appendChild(li);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    createTabs();
+    changeTab('dashboard');
+    updateDashboardStats();
+    addRecentActivityItems();
+  });
+</script>
+</body>
+</html>
+
+<script>
+   // Insecurly CONFIG
+   const firebaseConfig = {
+  apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+  authDomain: "insecurly.firebaseapp.com",
+  databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+  projectId: "insecurly",
+  storageBucket: "insecurly.appspot.com",
+  messagingSenderId: "720308147008",
+  appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+  measurementId: "G-L1KYG6M7WZ"
+};
+      firebase.initializeApp(firebaseConfig);
+
+      var db = firebase.firestore();
+
+  
+      // Function to set/remove premium status
+      async function togglePremium(enable) {
+        const username = document.getElementById("usernameInput").value.trim();
+        const error = document.getElementById("error");
+        
+        if (!username) {
+          error.innerText = "Please enter a username.";
+          return;
+        }
+
+        try {
+          const querySnapshot = await db.collection('users')
+            .where('Username', '==', username)
+            .get();
+
+          if (querySnapshot.empty) {
+            error.innerText = "User not found.";
+            return;
+          }
+
+          await querySnapshot.docs[0].ref.update({ isPremium: enable });
+          alert(`Premium status ${enable ? 'added' : 'removed'} successfully.`);
+          error.innerText = "";
+
+        } catch (err) {
+          console.error("Error updating user:", err);
+          error.innerText = "An error occurred while updating the user.";
+        }
+      }
+
+      const PremiumUsername = () => togglePremium(true);
+      const unPremiumUsername = () => togglePremium(false);
+
+    </script>
+    
+    <script type="module" src="/admin/home-code.js"></script>

@@ -3,78 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/@insecurly/settings/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <title>Account Settings</title>
 </head>
 <body>
   <nav class="navbar">
-    <div class="navbar-logo">insecurly</div>
+    <a href="/@insecurly/home" class="back-button">
+      <span class="material-icons">arrow_back</span>
+      <span>Back</span>
+    </a>
+      &nbsp; &nbsp;
+    <div class="navbar-logo"></div>
+    &nbsp; &nbsp;
     <div class="account-menu">
       <img class="user-profile-picture" id="user-profile-picture" src="#" alt="Profile Picture">
-      <span id="user-username"></span> &#9662;
+      <span id="user-username"></span>
       <div class="account-menu-options">
+        <div class="account-menu-option" id="home-option">Home</div>
+        <div class="account-menu-option" id="community-option">Community</div>
         <div class="account-menu-option" id="logout-option">Logout</div>
       </div>
     </div>
+    &nbsp;
   </nav>
 
   <main class="main-content">
-    <h1>Account Settings</h1>
-    <a href="/@insecurly/home">
-      <button class="submit-btn">Back ></button>
-    </a>
-    <form id="profile-picture-form">
-      <h1>Edit Profile</h1>
-      <label for="profile-picture-input">Upload Profile Picture (PNG, JPEG, GIF)</label>
-      <input type="file" accept="image/png, image/jpeg, image/gif" id="profile-picture-input">
-      <button type="submit" class="submit-btn">Upload Profile Picture</button>      
-      <div class="profile-picture-preview"><br>
-        <label>Picture Preview</label>
-        <div class="profile-picture-preview-container">
-          <img id="profile-picture-preview-image" src="/Image Assets/default-pfp.png"  width="100" height="100"
-            alt="Select an image to upload Refresh Page For Changes To Affect">
-            <p>100x100 Image Size Recomended *</p>
-            <br>
-          <label for="new-username">New Username:</label>
-          <input type="text" id="new-username" placeholder="Enter new username">
-          <p>Note: Username Can Only Be Updated Once</p>
-          <span id="username-error" class="error-message"></span>
-          <textarea id="new-bio" class="bio" placeholder="Enter your bio" style="display: none;"></textarea style="display: none;">
-        </div>
+    <div class="profile-card">
+      <div class="profile-header">
+      <input type="file" accept="image/png, image/jpeg, image/gif" id="profile-picture-input" hidden>
+      <img id="profile-picture-preview-image" src="/Image Assets/default-pfp.png" alt="Profile Picture">
+      <div>
+        <h1 class="profile-name" id="username">Loading username...</h1>
+        <input type="file" accept="image/*" id="profile-picture-input" hidden>
+        <label for="profile-picture-input" class="file-upload-btn">Change Photo</label>
       </div>
-    </form>
-
+    </div>
+              
     <form id="profile-settings-form">
-      <input type="email" id="new-email" placeholder="Contact Support To Update Your Email" style="display: none;">
-      <span id="email-error" class="error-message"></span>
-      <button type="submit" class="submit-btn">Update Profile</button>
-      <h1 style="color: red;">DANGER ZONE</h1>
-      <button id="delete-account-button">Delete Account</button>
+      <label for="new-username">Username</label>
+      <input type="text" id="new-username" placeholder="Enter new username">
+      <span id="username-error" class="error-message"></span>
 
-      <div id="custom-popup" class="custom-popup">
-        <div class="popup-content">
-          <h1>Are you sure?</h1>
-            <div class="line"></div>
-            <p>Deleting Your Account cannot be undone. (Note: Once You Press <b>Delete Account</b> Your Account Will Instiantly Delete.)
-            </p>
-          <button id="confirm-delete-button">Delete Account</button>
-          <button id="cancel-delete-button">Cancel</button>
+      <label for="new-bio" style="display: none;">Bio</label>
+      <textarea id="new-bio" rows="4" placeholder="Tell us about yourself" style="display: none;"></textarea>
+
+      <label for="new-link" style="display: none;">Profile Link</label>
+      <textarea id="new-link" class="bio" placeholder="Enter a Link (e.g. https://www.wavee.x10.bz/)" style="display: none;"></textarea>
+
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</main>
+
         </div>
       </div>
     </form>
     </main>
     
 
-  <footer class="footer">
-    <p>&copy; 2023 Vencore Inc. All Rights Reserved</p>
-  </footer>
 
   <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
-  <script src="/JavaScript Assets/pagescripts.js"></script>
+  <script src="/Assets/JavaScript Assets/pagescripts.js"></script>
   <script type="module" src="account.js"></script>
 </body>
 </html>
+<script>
+document.getElementById('profile-picture-input').addEventListener('change', function() {
+  // Get the file name
+  var fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen...';
+  
+  // Set the file name to the custom text element
+  document.getElemenatById('file-upload-name').textContent = fileName;
+});
+</script>

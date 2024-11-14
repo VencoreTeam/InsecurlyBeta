@@ -29,11 +29,11 @@ const userUsername = document.getElementById("user-username");
 const userProfilePicture = document.getElementById("user-profile-picture");
 const profileSettingsForm = document.getElementById("profile-settings-form");
 const newUsernameInput = document.getElementById("new-username");
-const newEmailInput = document.getElementById("new-email");
 const HomeOption = document.getElementById("home-option");
 const CommunityOption = document.getElementById("community-option");
 const newBioInput = document.getElementById("new-bio");
-const forbiddenUsernames = ["Guest", "null"]; // Banned Accounts From Changing Settings
+const newLinkInput = document.getElementById("new-link");
+const forbiddenUsernames = ["Guest", "wavee", "null"]; // Banned Accounts From Changing Settings
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -56,9 +56,8 @@ onAuthStateChanged(auth, async (user) => {
       }
     });
 
-    profilePictureForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const file = profilePictureInput.files[0];
+    // Function to update profile picture
+    const updateProfilePicture = async (file) => {
       if (file) {
         try {
           const storageRef = ref(storage, `profile-pictures/${user.uid}`);
@@ -67,13 +66,28 @@ onAuthStateChanged(auth, async (user) => {
           await updateProfile(auth.currentUser, {
             photoURL: downloadURL,
           });
-          window.location.href = "/@insecurly/settings";
+          location.reload();
           console.log("Profile picture updated successfully!");
         } catch (error) {
           console.error("Error updating profile picture:", error);
         }
       }
-    });
+    };
+
+    // Update profile picture when form is submitted
+    if (profilePictureForm) {
+      profilePictureForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const file = profilePictureInput.files[0];
+        await updateProfilePicture(file);
+      });
+    }
+
+    // Update profile picture when file is selected (without form submission)
+  //  profilePictureInput.addEventListener("change", async (e) => {
+    //  const file = e.target.files[0];
+     // await updateProfilePicture(file);
+    // });
 
     // Limit username changes to one per account
     const userDocRef = doc(db, "users", user.uid);
@@ -81,42 +95,44 @@ onAuthStateChanged(auth, async (user) => {
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      if (userData.usernameChangeCount >= 1) {
+      if (userData.usernameChangeCount >= 10) {
         newUsernameInput.disabled = true;
-        document.getElementById("username-error").textContent = "You Have Reached The Maximum Username Changeing Limit.";
+        document.getElementById("username-error").textContent = "Username change limit reached.";
       }
     }
 
     newUsernameInput.addEventListener("blur", async () => {
-if (!newUsernameInput.disabled) {
-const newUsername = newUsernameInput.value.trim().toLowerCase();
-const querySnapshot = await getDocs(collection(db, "users"));
-const usernames = querySnapshot.docs.map((doc) => doc.data().Username.toLowerCase());
+      if (!newUsernameInput.disabled) {
+        const newUsername = newUsernameInput.value.trim().toLowerCase();
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const usernames = querySnapshot.docs.map((doc) => doc.data().Username.toLowerCase());
 
-if (usernames.includes(newUsername.toLowerCase())) {
-  document.getElementById("username-error").textContent = "Username is already taken.";
-  newUsernameInput.value = ""; // Clear the input field
-} else {
-  document.getElementById("username-error").textContent = "";
-}
-}
-});
-
+        if (usernames.includes(newUsername.toLowerCase())) {
+          document.getElementById("username-error").textContent = "Username is already taken.";
+          newUsernameInput.value = ""; // Clear the input field
+        } else {
+          document.getElementById("username-error").textContent = "";
+        }
+      }
+    });
 
     profileSettingsForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const newUsername = newUsernameInput.value.trim().toLowerCase();
-      const newEmail = newEmailInput.value.trim();
-      const newBio = newBioInput.value; // Get the bio value
+      const newUsername = newUsernameInput ? newUsernameInput.value.trim().toLowerCase() : "";
+      const newBio = newBioInput ? newBioInput.value : "";
+      const newLink = newLinkInput ? newLinkInput.value : "";
+      const newProfilePicture = profilePictureInput.files[0];
 
-       // Check if the username is already taken
-const querySnapshot = await getDocs(collection(db, "users"));
-const usernames = querySnapshot.docs.map((doc) => doc.data().Username.toLowerCase());
+      // Check if the username is already taken
+      if (newUsername) {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const usernames = querySnapshot.docs.map((doc) => doc.data().Username.toLowerCase());
 
-if (usernames.includes(newUsername.toLowerCase())) {
-document.getElementById("username-error").textContent = "Username is already taken.";
-return; // Don't proceed with the form submission
-}
+        if (usernames.includes(newUsername.toLowerCase())) {
+          document.getElementById("username-error").textContent = "Username is already taken.";
+          return; // Don't proceed with the form submission
+        }
+      }
 
       try {
         // Check if the Firestore document for the user already exists
@@ -129,21 +145,17 @@ return; // Don't proceed with the form submission
           return; // You can add proper error handling here
         }
 
-        // Update user profile with new username and email
-        if (newUsername.length > 0) {
+        // Update user profile with new username
+        if (newUsername) {
           await updateProfile(auth.currentUser, {
             displayName: newUsername,
           });
         }
-
-        if (newEmail.length > 0) {
-          await updateEmail(auth.currentUser, newEmail);
-        }
-
+        
         // Update the existing user document in Firestore
         const existingData = userDoc.data();
 
-        if (newUsername.length > 0) {
+        if (newUsername) {
           existingData.Username = newUsername;
           if (!existingData.usernameChangeCount) {
             existingData.usernameChangeCount = 1;
@@ -152,16 +164,22 @@ return; // Don't proceed with the form submission
           }
         }
 
-        if (newEmail.length > 0) {
-          existingData.email = newEmail;
+        // Set the bio in the Firestore document
+        if (newBio) {
+          existingData.bio = newBio;
         }
 
-          // Set the bio in the Firestore document
-         if (newBio.length > 0) {
-         existingData.bio = newBio;
-         }
+        // Set the link in the Firestore document
+        if (newLink) {
+          existingData.link = newLink;
+        }
 
         await setDoc(userDocRef, existingData);
+
+        // Update profile picture if a new one is selected
+        if (newProfilePicture) {
+          await updateProfilePicture(newProfilePicture);
+        }
 
         console.log("Profile updated successfully!");
         window.location.reload();
@@ -199,135 +217,35 @@ return; // Don't proceed with the form submission
 });
 
 
+// Function to display username in a span element
+const displayUsername = () => {
+  const usernameSpan = document.getElementById('username');
+  if (usernameSpan) {
+    usernameSpan.textContent = 'Loading username...';
+    setTimeout(() => {
+      usernameSpan.textContent = 'Hello, @' + (auth.currentUser?.displayName || 'User');
+    }, 1000); // Delay of 1 second
+  }
+};
 
-
-
-// ACCOUNT DELETION CODE START
-const customPopup = document.getElementById('custom-popup');
-const confirmDeleteButton = document.getElementById('confirm-delete-button');
-const cancelDeleteButton = document.getElementById('cancel-delete-button');
-const deleteAccountButton = document.getElementById('delete-account-button');
-
-function showCustomPopup() {
-customPopup.style.display = 'block';
-}
-
-function hideCustomPopup() {
-customPopup.style.display = 'none';
-}
-
-deleteAccountButton.addEventListener('click', (e) => {
-e.preventDefault();
-showCustomPopup();
+// Call the function when the auth state changes
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    displayUsername();
+  }
 });
 
-confirmDeleteButton.addEventListener('click', () => {
-// Assuming you have initialized Firebase Authentication
-const user = auth.currentUser; // Get the current user
-
-if (user) {
-// Call the Firebase Authentication method to delete the user
-user.delete()
-  .then(() => {
-    // User account deleted successfully
-    console.log('Account deleted');
-    alert('Your account has been successfully deleted.');
-    // You can redirect the user or perform other actions as needed
-    hideCustomPopup();
-  })
-  .catch((error) => {
-    console.error('Error deleting the account:', error);
-    alert('An error occurred while deleting your account. Please try again. | This Most Likely is because you need to Re-Login To Your Account Then Try To Delete Your Account Again.');
-    hideCustomPopup();
-  });
-} else {
-console.error('User not authenticated');
-alert('An error occurred. Please try again later.');
-hideCustomPopup();
-}
-});
-
-cancelDeleteButton.addEventListener('click', () => {
-hideCustomPopup();
-});
-// ACCOUNT DELETION CODE END
 
 
-// Mute Profile Audio Code
 
+// Check for developer tools
+// const isDevToolsOpen = () => {
+   // const threshold = 160; // Speed Of SpamRefresh
 
-const muteToggle = document.getElementById('mute-toggle');
-const muteCheckbox = document.getElementById('mute-checkbox');
+   // if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+     // alert('Sorry, Due to privacy reasons you cannot access the developer console on this page. Please exit the developer console to use this page.');
+     // location.reload();
+   // }
+  // };
 
-// Function to save the mute state in local storage
-function saveMuteState(muted) {
-localStorage.setItem('muteState', JSON.stringify(muted));
-}
-
-// Function to retrieve the mute state from local storage
-function getMuteState() {
-const savedState = localStorage.getItem('muteState');
-return savedState ? JSON.parse(savedState) : false; // Default to false if no state is found
-}
-
-// Function to stop all Profile Sounds
-function stopAllSounds() {
-
-// Bla Bla Nothing Needed Here
-
-}
-
-// Add an event listener to the mute checkbox
-muteCheckbox.addEventListener('change', () => {
-const muted = muteCheckbox.checked; // Check if the checkbox is checked
-
-// Mute or unmute sounds based on the 'muted' variable
-if (muted) {
-stopAllSounds();
-} else {
-  // idk
-}
-
-// Save the mute state in local storage
-saveMuteState(muted);
-});
-
-// Set the initial mute state based on the saved state
-const initialMuteState = getMuteState();
-muteCheckbox.checked = initialMuteState;
-
-// Call the change event on the mute checkbox to apply the initial state
-muteCheckbox.dispatchEvent(new Event('change'));
-
-// Modify the playCustomSoundK function
-function playCustomSoundK() {
-// Get the audio element
-const customAudioK = document.getElementById('custom-audio-k');
-
-// Check if the audio element exists and the mute state is not enabled, then play the sound
-if (customAudioK && !muteCheckbox.checked) {
-customAudioK.play();
-}
-}
-
-// Modify the playCustomSoundkiro function
-function playCustomSoundkiro() {
-// Get the audio element
-const customAudiokiro = document.getElementById('custom-audio-kiro');
-
-// Check if the audio element exists and the mute state is not enabled, then play the sound
-if (customAudiokiro && !muteCheckbox.checked) {
-customAudiokiro.play();
-}
-}
-
-// Modify the playCustomSoundXeno function
-function playCustomSoundXeno() {
-// Get the audio element
-const customAudioxeno = document.getElementById('custom-audio-xeno');
-
-// Check if the audio element exists and the mute state is not enabled, then play the sound
-if (customAudioxeno && !muteCheckbox.checked) {
-customAudioxeno.play();
-}
-}
+ // setInterval(isDevToolsOpen, 1000);

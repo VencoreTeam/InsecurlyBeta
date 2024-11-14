@@ -1,0 +1,289 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #050505;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: visible;
+}
+
+header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    color: #ffffff;
+    user-select: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #020202;
+    color: white;
+    user-select: none;
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: visible;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+th {
+    background-color: #111;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #111;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #070707;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+td button {
+    background-color: #1a1a1a;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+td button:hover {
+    background-color: #333;
+    border-color: #444;
+    transform: translateY(-1px);
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.copy-button {
+    background-color: #28a745;
+}
+
+.copy-button:hover {
+    background-color: #218838;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #111;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    z-index: 1000;
+    border-radius: 8px;
+    border: 1px solid #333;
+    overflow: hidden;
+}
+
+.dropdown-content button {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #222;
+}
+
+.dropdown-content button:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content button:hover {
+    background-color: #222;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Ensure the dropdown stays on top of other elements */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Optional: Add a max-height with scrolling for many options */
+.dropdown-content {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification {
+    position: fixed;
+    top: 20px; /* Move it to the top */
+    right: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+    display: none; /* Hidden by default */
+    z-index: 1000;
+}
+
+.notification.show {
+    display: block;
+}
+
+.notification.hide {
+    display: none;
+}
+
+
+/* Modal styles */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    overflow: hidden;
+}
+
+.modal-content {
+    background-color: #000000;
+    color: white;
+    margin: 15% auto;
+    padding: 30px;
+    border: 1px solid #333;
+    width: 550px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.user-info {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.user-info img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 3px solid #007bff;
+}
+
+.user-info-details {
+    flex: 1;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #111;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.info-label {
+    font-weight: bold;
+    min-width: 120px;
+    color: #007bff;
+}
+
+.info-value {
+    flex: 1;
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    margin-right: 5px;
+    user-select: none;
+}
+
+.badge-premium {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.badge-admin {
+    background-color: #ff4444;
+    color: #fff;
+}
+
+.badge-owner {
+    background-color: #000000;
+    color: #fff;
+}
+
+.close {
+    color: #ffffff;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: rgb(212, 212, 212);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Add this to ensure table cells don't clip content */
+td {
+    position: relative;
+}

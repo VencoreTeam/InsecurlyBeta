@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Reports</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Reports Dashboard</h1>
+        </header>
+        <table id="reportsTable">
+            <thead>
+                <tr>
+                    <th>Report ID</th>
+                    <th>Reporter UID</th>
+                    <th>Report Reason</th>
+                    <th>Reported Username</th>
+                    <th>Reporter Note</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Report rows will be injected here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+        <!-- User info modal -->
+        <div id="userModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>User Information</h2>
+                <p id="userInfo">Loading...</p>
+            </div>
+        </div>
+    
+    
+
+    <div id="notification" class="notification"></div>
+
+    <!-- Include Firebase SDKs and your Firebase config here -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
