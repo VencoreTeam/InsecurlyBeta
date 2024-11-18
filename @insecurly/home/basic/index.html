@@ -262,6 +262,14 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
 
+    // Check the "AccountActive" field in the Firestore document
+    const isAccountActive = userDoc.data() && userDoc.data().AccountActive;
+
+    if (!isAccountActive) {
+      // If the account is not active, redirect to the "/disabled" page
+      window.location.href = "/denied";
+      return;
+    }
 
     // Display the username or fallback to "User" if not set
     userUsername.textContent = user.displayName || "User";

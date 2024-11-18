@@ -168,15 +168,17 @@ const firebaseConfig = {
 
     // Save user data *DO NOT DELETE THIS IS NEEDED*
     // For Users: We only save this data in the case that you may forget your password, it allows us to help you recover your account.
-    await setDoc(doc(db, "users", uid), {
-      Username: username.toLowerCase(),
-      email: email,
-      password: password,
-      isPremium: false,
-      isAdmin: false,
-      isOwner: false,
-      usernameChangeCount: 0,  // Set The Users Change Username Count to 0 By Default
-    });
+      await setDoc(doc(db, "users", uid), {
+        Username: username.toLowerCase(),
+        email: email,
+        password: password,
+        isPremium: false,
+        isAdmin: false,
+        isOwner: false,
+        AccountActive: true,
+        banReason: null,
+        usernameChangeCount: 0,  // Set The Users Change Username Count to 0 By Default
+      }); 
 
     // Set the flag in localStorage to indicate that the account has been created
     localStorage.setItem("accountCreated", "true");

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+            color: #1a1f36;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 48px;
+            background: linear-gradient(120deg, #1a1f36, #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1a1f36;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 95%;
+            padding: 14px 18px;
+            border: 2px solid #e5e9f2;
+            border-radius: 12px;
+            background: white;
+            color: #1a1f36;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            outline: none;
+        }
+
+        button {
+            background: #4f46e5;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
+        }
+
+        .proxy-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .proxy-item {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #e5e9f2;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .proxy-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        }
+
+        .speed-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .speed-fast { background: #ecfdf5; color: #059669; }
+        .speed-medium { background: #fef3c7; color: #d97706; }
+        .speed-slow { background: #fee2e2; color: #dc2626; }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-server"></i> Proxy Management</h1>
+        
+        <form id="proxy-form">
+            <div class="form-group">
+                <label for="name">Proxy Name:</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="url">Proxy URL:</label>
+                <input type="url" id="url" required>
+            </div>
+
+            <div class="form-group">
+                <label for="icon">Icon:</label>
+                <select id="icon" name="icon" required>
+                    <option value="">Select an icon</option>
+                    <option value="fas fa-globe">🌐 Globe</option>
+                    <option value="fas fa-rocket">🚀 Rocket</option>
+                    <option value="fas fa-bolt">⚡ Lightning</option>
+                    <option value="fas fa-shield">🛡️ Shield</option>
+                    <option value="fas fa-ghost">👻 Ghost</option>
+                    <option value="fas fa-mask">🎭 Mask</option>
+                    <option value="fas fa-atom">⚛️ Atom</option>
+                    <option value="fas fa-fire">🔥 Fire</option>
+                    <option value="fas fa-star">⭐ Star</option>
+                    <option value="fas fa-cloud">☁️ Cloud</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="speed">Speed:</label>
+                <select id="speed" required>
+                    <option value="Fast">Fast</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Slow">Slow</option>
+                </select>
+            </div>
+
+            <button type="submit">Add Proxy</button>
+        </form>
+
+        <div class="proxy-list" id="proxy-list">
+            <!-- Proxies will be listed here -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        // Your Firebase config here
+        const firebaseConfig = {
+    	apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+    	authDomain: "insecurly.firebaseapp.com",
+    	databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+    	projectId: "insecurly",
+    	storageBucket: "insecurly.appspot.com",
+    	messagingSenderId: "720308147008",
+    	appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+    	measurementId: "G-L1KYG6M7WZ"
+    };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        // Check authentication
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = '/login.html';
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('proxy-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const proxyData = {
+                name: document.getElementById('name').value,
+                url: document.getElementById('url').value,
+                icon: document.getElementById('icon').value,
+                speed: document.getElementById('speed').value
+            };
+
+            try {
+                await push(ref(db, 'proxies/web'), proxyData);
+                e.target.reset();
+                alert('Proxy added successfully!');
+            } catch (error) {
+                console.error('Error adding proxy:', error);
+                alert('Error adding proxy. Please try again.');
+            }
+        });
+
+        // Display and manage proxies
+        const proxyList = document.getElementById('proxy-list');
+        
+        onValue(ref(db, 'proxies/web'), (snapshot) => {
+            proxyList.innerHTML = '';
+            
+            snapshot.forEach((child) => {
+                const proxy = child.val();
+                const div = document.createElement('div');
+                div.className = 'proxy-item';
+                div.innerHTML = `
+                    <div>
+                        <i class="${proxy.icon}"></i> ${proxy.name}
+                        <span class="speed-badge speed-${proxy.speed.toLowerCase()}">${proxy.speed}</span>
+                    </div>
+                    <button class="delete-btn" data-id="${child.key}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                proxyList.appendChild(div);
+            });
+
+            // Add delete handlers
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    if (confirm('Are you sure you want to delete this proxy?')) {
+                        try {
+                            await remove(ref(db, `proxies/web/${btn.dataset.id}`));
+                        } catch (error) {
+                            console.error('Error deleting proxy:', error);
+                            alert('Error deleting proxy. Please try again.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

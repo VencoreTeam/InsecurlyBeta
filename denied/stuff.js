@@ -18,19 +18,43 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
     var uid = user.uid;
-    // Fetch the user's ban reason from Firestore
-    firestore.collection("users").doc(uid).get().then(function(doc) {
-      if (doc.exists) {
-        var banReason = doc.data().BanReason; // Make sure 'BanReason' matches the field name in Firestore
-        document.getElementById("ban-reason").innerText = banReason;
-      } else {
-        document.getElementById("ban-reason").innerText = "No ban reason found.";
-      }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    });
+    
+    // Get profile picture from Firebase Storage
+    const storageRef = firebase.storage().ref();
+    const profilePicRef = storageRef.child(`profile-pictures/${uid}`);
+    
+    // Get download URL for profile picture
+    profilePicRef.getDownloadURL()
+      .then(function(url) {
+        document.getElementById("user-avatar").src = url;
+      })
+      .catch(function(error) {
+        // If profile picture doesn't exist, use default
+        document.getElementById("user-avatar").src = "/Image Assets/InsecurlyLogo.png";
+      });
+
+    // Fetch the user's data from Firestore
+    firestore.collection("users").doc(uid).get()
+      .then(function(doc) {
+        if (doc.exists) {
+          const userData = doc.data();
+          // Update username and ban reason
+          document.getElementById("username").innerText = "@" + (userData.Username || "Unknown User");
+          document.getElementById("ban-reason").innerText = userData.banReason || "No ban reason specified.";
+        } else {
+          document.getElementById("username").innerText = "Unknown User";
+          document.getElementById("ban-reason").innerText = "No ban reason found.";
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting document:", error);
+        document.getElementById("username").innerText = "Error loading username";
+        document.getElementById("ban-reason").innerText = "Error loading ban reason.";
+      });
   } else {
     // No user is signed in.
+    document.getElementById("username").innerText = "Not signed in";
+    document.getElementById("user-avatar").src = "/Image Assets/InsecurlyLogo.png";
     document.getElementById("ban-reason").innerText = "User is not signed in.";
   }
 });

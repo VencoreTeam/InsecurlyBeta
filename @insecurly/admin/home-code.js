@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, query, orderBy, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
    // Insecurly CONFIG
@@ -24,7 +24,7 @@ const db = getFirestore();
 
 const storage = getStorage(app);
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   const userUsername = document.getElementById("user-username");
   const userProfilePicture = document.getElementById("user-profile-picture");
   const myProfileLink = document.getElementById("my-profile-link"); // New line
@@ -32,25 +32,30 @@ onAuthStateChanged(auth, (user) => {
   const logoutOption = document.getElementById("logout-option");
 
   if (user) {
+
+    // Check the "AccountActive" field in the Firestore document
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    const isAccountActive = userDoc.data() && userDoc.data().AccountActive;
+
+    if (!isAccountActive) {
+      // If the account is not active, redirect to the "/disabled" page
+      window.location.href = "/denied";
+      return;
+    }
+    
     // User is logged in
-
-    // Display the username or fallback to "User" if not set
     userUsername.textContent = user.displayName || "User";
-
-    // Display the user's profile picture or a placeholder
     userProfilePicture.src = user.photoURL || "/Image Assets/default-pfp.png";
 
-    // Redirect to account settings page when clicked
     accountSettingsOption.addEventListener("click", () => {
       window.location.href = "/settings/profile";
     });
 
-      // Redirect to the user's profile page when "My Profile" is clicked (New code)
-      myProfileLink.addEventListener("click", () => {
-        window.location.href = `/profile/?@=${user.displayName}`;
-      });
+    myProfileLink.addEventListener("click", () => {
+      window.location.href = `/profile/?@=${user.displayName}`;
+    });
 
-    // Logout when logout option is clicked
     logoutOption.addEventListener("click", () => {
       signOut(auth)
         .then(() => {

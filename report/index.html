@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Report</title>
+    <link rel="stylesheet" href="/@insecurly/report/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Submit a Report</h1>
+        </header>
+        <form id="reportForm">
+            <div class="form-group">
+                <label for="reporterUserId">Your User ID:</label>
+                <input type="text" id="reporterUserId" required>
+            </div>
+            <div class="form-group">
+                <label for="reportedUserId">Reported User ID:</label>
+                <input type="text" id="reportedUserId" required>
+            </div>
+            <div class="form-group">
+                <label for="reportReason">Reason for Report:</label>
+                <select id="reportReason" required>
+                    <option value="">Select a reason</option>
+                    <option value="spam">Spam</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reportInfo">Report Information:</label>
+                <textarea id="reportInfo" rows="4" required></textarea>
+            </div>
+            <button type="submit">Submit Report</button>
+        </form>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <!-- Include Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
