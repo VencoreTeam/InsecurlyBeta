@@ -73,7 +73,8 @@
         border-radius: 12px;
         display: flex;
         gap: 5px;
-        justify-content: space-between;
+        justify-content: center;
+        align-items: center;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
@@ -208,6 +209,71 @@
   color: #fff;
 }
 
+  /* Add new styles for update log */
+  .update-log {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, rgba(1, 9, 36, 0.95), rgba(1, 42, 192, 0.95));
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 350px;
+    z-index: 1000;
+    animation: slideIn 0.5s ease-out;
+  }
+
+  .update-log h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .update-log .version {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .update-log ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .update-log li {
+    margin: 8px 0;
+    font-size: 14px;
+  }
+
+  .update-log .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .update-log .close-btn:hover {
+    opacity: 1;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
   </style>
 </head>
 
@@ -254,15 +320,11 @@
       </div>      
     </div>
   </nav>
-<br>
   <div class="system-notification" style="display: none;">
     <p><strong>System:</strong> Welcome to the new and improved homepage!</p>
 </div>
-<br>
 
 <div class="top-users">
-<br>
-   <br>
    <h2>Methods - Beta</h2>
    <div class="container">
     <div class="grid">
@@ -278,43 +340,9 @@
       <!-- Repeat for other items -->
     </div>
   </div>
-  
   </div>
-  <br>
-     <br>
 </div>
-
-<br>
-
-
-<br>
-
 </div>
-
-
-<br>
-
-<div class="lb-container" style="display: none;">
-  <br>
-  <h1>Top 10 Richest Users</h1>
-  <ol id="leaderboard"></ol>
-  </div>
-
-      <!-- Discord-like popup -->
-  <div id="discord-popup">
-    <span id="close-popup">&times;</span>
-    <p><strong>New Update!</strong></p>
-    <p>Version 1.1.0</p>
-    <ul>
-      <li>- Fixed Free Access Bug</li>
-      <li>- Improved The UI</li>
-      <li>- Improved Page Loading</li>
-      <li>- Added Profile Tags Staff: (Owner, Admin) | Buyers: (Plus, Basic)</li>
-
-
-      <!-- Add more update details as needed -->
-    </ul>
-  </div>
 
   <script>
     document.getElementById('draggableButton').addEventListener('dragstart', function (e) {
@@ -375,14 +403,17 @@
     return;
     }
 
-    // Check the "AccountActive" field in the Firestore document
-    const isAccountActive = userDoc.data() && userDoc.data().AccountActive;
-
-    if (!isAccountActive) {
-      // If the account is not active, redirect to the "/disabled" page
-      window.location.href = "/denied";
-      return;
-    }
+    // Set up realtime listener for AccountActive status
+    const accountStatusRef = doc(db, 'users', user.uid);
+    const unsubscribe = onSnapshot(accountStatusRef, (doc) => {
+        const isAccountActive = doc.data() && doc.data().AccountActive;
+        
+        if (!isAccountActive) {
+            // If account becomes inactive, redirect to denied page
+            window.location.href = "/denied";
+            return;
+        }
+    });
 
     const isAdmin = userDoc.data() && userDoc.data().isAdmin; // Add this line
     const isOwner = userDoc.data() && userDoc.data().isOwner; // Add this line
@@ -549,5 +580,41 @@
     <script src="/JavaScript Assets/pagescripts.js"></script>
     <script src="/JavaScript Assets/loading-site.js"></script>
     
+  <!-- Add update log popup -->
+  <div class="update-log" id="updateLog" style="display: none;">
+    <button class="close-btn" onclick="closeUpdateLog()">×</button>
+    <h3>
+      <i class="fas fa-rocket"></i>
+      What's New at Insecurly
+    </h3>
+    <div class="version">Version 1.2</div>
+    <ul>
+      <li>🔧 Fixed Admin Panel Security Vulnerability</li>
+      <li>🎨 Improved The UI a bit</li>
+      <li>⚡ enhanced Page Loading speeds</li>
+      <li>🏷️ Added new proxy tags</li>
+      <li>🏷️ removed direct proxy links for security</li>
+    </ul>
+  </div>
+
+  <script>
+    // Add this to your existing script section
+    function closeUpdateLog() {
+      document.getElementById('updateLog').style.display = 'none';
+      // Store in localStorage so it doesn't show again
+    //  localStorage.setItem('updateLogShown', 'false');
+    }
+
+    // Show update log when page loads (if not already shown)
+    window.addEventListener('load', function() {
+      // Check if update has been shown before
+      if (!localStorage.getItem('updateLogShown')) {
+        // Wait a short delay to ensure page is fully loaded
+        setTimeout(function() {
+          document.getElementById('updateLog').style.display = 'block';
+        }, 1000);
+      }
+    });
+  </script>
 </body>
 </html>

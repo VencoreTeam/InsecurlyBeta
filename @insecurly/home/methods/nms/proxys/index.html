@@ -143,42 +143,6 @@
         li {
             margin-bottom: 15px;
         }
-        .notice {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1000;
-            max-width: 80%;
-            text-align: center;
-        }
-        .notice h3 {
-            color: #e74c3c;
-        }
-        .notice button {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
         .footer i {
             margin-right: 5px;
             color: #555;
@@ -226,9 +190,23 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-        .speed-fast { background-color: #2ecc71; color: white; }
-        .speed-medium { background-color: #f39c12; color: white; }
-        .speed-slow { background-color: #e74c3c; color: white; }
+        .speed-fast { background: #ecfdf5; color: #059669; }
+        .speed-medium { background: #fef3c7; color: #d97706; }
+        .speed-slow { background: #fee2e2; color: #dc2626; }
+
+        /* Status badge styles */
+        .status-badge {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            white-space: nowrap;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .status-online { background-color: #034e23; color: white; }
+        .status-down { background-color: #e74c3c; color: white; }
 
         /* Update credits intro styles */
         .credits-intro {
@@ -291,6 +269,132 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
+        }
+
+        #proxy-frame-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: none;
+        }
+
+        .proxy-frame-wrapper {
+            position: relative;
+            width: 95%;
+            height: 90vh;
+            margin: 2.5vh auto;
+            background: var(--card-background);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .proxy-close-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .proxy-close-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        #proxy-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+        }
+
+        /* Media queries for better responsiveness */
+        @media screen and (max-width: 768px) {
+            .proxy-frame-wrapper {
+                width: 100%;
+                height: 100vh;
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .proxy-close-btn {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        .proxy-intro-ad {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000020 0%, #000046 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+        }
+
+        .intro-ad-content {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro-ad-content img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        .intro-ad-content h2 {
+            color: #3498db;
+            margin: 1rem 0;
+        }
+
+        .intro-ad-content p {
+            color: #fff;
+            margin: 0.5rem 0;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin: 1rem auto;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: #3498db;
+            animation: loading 2s ease-in-out forwards;
+        }
+
+        @keyframes loading {
+            from { width: 0%; }
+            to { width: 100%; }
         }
     </style>
 </head>
@@ -401,27 +505,74 @@
         </footer>
     </div>
 
-    <div class="overlay" id="overlay"></div>
-    <div class="notice" id="notice">
-        <h3>Notice</h3>
-        <p>Sharing proxy links is prohibited. Violations will result in immediate account termination without refund.</p>
-        <button onclick="closeNotice()">I Understand</button>
+    <div id="proxy-frame-container" style="display: none;">
+        <div id="proxy-intro-ad" class="proxy-intro-ad">
+            <div class="intro-ad-content">
+                <img src="/Image Assets/InsecurlyLogo.png" alt="Insecurly Logo">
+                <h2>Welcome to Insecurly Premium Proxy</h2>
+                <p>Loading your secure connection...</p>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="proxy-frame-wrapper">
+            <button onclick="closeProxyFrame()" class="proxy-close-btn">
+                <i class="fas fa-times"></i> Close
+            </button>
+            <iframe id="proxy-frame"></iframe>
+        </div>
     </div>
 
     <script>
-        window.onload = function() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('notice').style.display = 'none';
-        }
+    function openProxyFrame(url) {
+        const container = document.getElementById('proxy-frame-container');
+        const frame = document.getElementById('proxy-frame');
+        const introAd = document.getElementById('proxy-intro-ad');
+        
+        // Reset iframe src
+        frame.src = '';
+        
+        // Show container and intro ad
+        container.style.display = 'block';
+        introAd.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Reset loading animation
+        const progress = introAd.querySelector('.loading-progress');
+        progress.style.animation = 'none';
+        progress.offsetHeight; // Trigger reflow
+        progress.style.animation = 'loading 2s ease-in-out forwards';
+        
+        // Hide intro ad and load iframe after delay
+        setTimeout(() => {
+            introAd.style.display = 'none';
+            frame.src = url;
+            frame.sandbox = "allow-same-origin allow-scripts allow-forms allow-pointer-lock allow-top-navigation";
+        }, 2000);
+        
+        document.addEventListener('keydown', handleEscKey);
+    }
 
-        function closeNotice() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('notice').style.display = 'none';
+    function closeProxyFrame() {
+        const container = document.getElementById('proxy-frame-container');
+        const frame = document.getElementById('proxy-frame');
+        
+        container.style.display = 'none';
+        frame.src = '';
+        document.body.style.overflow = 'auto';
+        document.removeEventListener('keydown', handleEscKey);
+    }
+
+    function handleEscKey(event) {
+        if (event.key === 'Escape') {
+            closeProxyFrame();
         }
+    }
     </script>
-</body>
-</html>
-<script type="module">
+
+    <script type="module">
     import {
     	initializeApp
     } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
@@ -484,45 +635,49 @@
     			window.location.href = "/@insecurly/home/basic";
     			return;
     		}
-    // Check the "AccountActive" field in the Firestore document
-    const isAccountActive = userDoc.data() && userDoc.data().AccountActive;
-
-    if (!isAccountActive) {
-      // If the account is not active, redirect to the "/disabled" page
-      window.location.href = "/denied";
-      return;
-    }
+            
+    // Set up realtime listener for AccountActive status
+    const accountStatusRef = doc(db, 'users', user.uid);
+    const unsubscribe = onSnapshot(accountStatusRef, (doc) => {
+        const isAccountActive = doc.data() && doc.data().AccountActive;
+        
+        if (!isAccountActive) {
+            // If account becomes inactive, redirect to denied page
+            window.location.href = "/denied";
+            return;
+        }
+    });
     		const isAdmin = userDoc.data() && userDoc.data().isAdmin;
     		const isOwner = userDoc.data() && userDoc.data().isOwner;
-    		if (isAdmin) {
-    			premiumStatusWrapper.textContent = 'Admin';
-    			premiumStatusWrapper.style.backgroundColor = '#000';
-    			premiumStatusWrapper.style.color = '#fff';
-    			premiumStatusWrapper.style.borderRadius = '20px';
-    			premiumStatusWrapper.style.padding = '5px 10px';
-    			premiumStatusWrapper.style.zIndex = '1';
-    			premiumStatusWrapper.style.backgroundImage = 'url("https://t3.ftcdn.net/jpg/02/95/15/72/240_F_295157232_A3vxSfsPOwO97ozgUr6U9po7vFIrGajG.webp")';
-    			premiumStatusWrapper.style.backgroundSize = 'cover';
-    		} else if (isOwner) {
-    			premiumStatusWrapper.textContent = 'Insecurly Owner';
-    			premiumStatusWrapper.style.backgroundColor = '#000';
-    			premiumStatusWrapper.style.color = '#fff';
-    			premiumStatusWrapper.style.borderRadius = '20px';
-    			premiumStatusWrapper.style.padding = '5px 10px';
-    			premiumStatusWrapper.style.zIndex = '1';
-    			premiumStatusWrapper.style.backgroundImage =
-    				'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5c5ybpEprgTQRz-_gMNmsTpqXjY3VQ0tClOT6tZMd5KNx7xmEP6PHD-KbIAfW0ma2AOs&usqp=CAU")';
+    		const statusStyles = {
+    			backgroundColor: '#000',
+    			color: '#fff', 
+    			borderRadius: '20px',
+    			padding: '5px 10px',
+    			zIndex: '1'
+    		};
+
+    		if (isAdmin || isOwner) {
+    			Object.assign(premiumStatusWrapper.style, statusStyles);
+    			if (isAdmin) {
+    				premiumStatusWrapper.textContent = 'Admin';
+    				premiumStatusWrapper.style.backgroundImage = 'url("https://t3.ftcdn.net/jpg/02/95/15/72/240_F_295157232_A3vxSfsPOwO97ozgUr6U9po7vFIrGajG.webp")';
+    			} else {
+    				premiumStatusWrapper.textContent = 'Insecurly Owner';
+    				premiumStatusWrapper.style.backgroundImage = 'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5c5ybpEprgTQRz-_gMNmsTpqXjY3VQ0tClOT6tZMd5KNx7xmEP6PHD-KbIAfW0ma2AOs&usqp=CAU")';
+    			}
     			premiumStatusWrapper.style.backgroundSize = 'cover';
     		} else {
-    			const premiumStatusContainer = document.createElement('div');
-    			premiumStatusContainer.classList.add('premium-status-container');
-    			premiumStatusContainer.textContent = isPremium ? 'Plus Plan' : 'Basic Plan';
-    			premiumStatusContainer.classList.remove('basic', 'plus');
-    			premiumStatusContainer.classList.add(isPremium ? 'plus' : 'basic');
-    			premiumStatusContainer.style.backgroundColor = isPremium ? '#ffd700' : '#3498db';
-    			const accountMenu = document.querySelector('.account-menu');
-    			accountMenu.appendChild(premiumStatusContainer);
+    			const container = document.createElement('div');
+    			container.classList.add('premium-status-container', isPremium ? 'plus' : 'basic');
+    			container.textContent = isPremium ? 'Plus Plan' : 'Basic Plan';
+    			container.style.backgroundColor = isPremium ? '#ffd700' : '#3498db';
+    			container.style.padding = '5px 10px';
+    			container.style.borderRadius = '20px';
+    			container.style.zIndex = '2';
+    			document.querySelector('.account-menu').appendChild(container);
     		}
+            
     		userUsername.textContent = user.displayName || "User";
     		userProfilePicture.src = user.photoURL || "/Image Assets/default-pfp.png";
     		accountSettingsOption.addEventListener("click", () => {
@@ -603,10 +758,13 @@
         return `
             <li>
                 <div class="proxy-link">
-                    <a href="${proxy.url}" class="proxy-${proxy.className} proxy-name">
+                    <a href="#" onclick="openProxyFrame('${proxy.url}'); return false;" class="proxy-${proxy.className} proxy-name">
                         <i class="fas ${proxy.icon}"></i>${proxy.name}
                     </a>
-                    <span class="speed-badge speed-${proxy.speed.toLowerCase()}">${proxy.speed}</span>
+                    <div style="display: inline-flex; gap: 8px; align-items: center;">
+                        <span class="speed-badge speed-${proxy.speed.toLowerCase()}">${proxy.speed}</span>
+                        <span class="status-badge status-${proxy.status.toLowerCase()}">${proxy.status}</span>
+                    </div>
                 </div>
             </li>
         `;
@@ -652,3 +810,36 @@
   </script>
     <script src="/JavaScript Assets/pagescripts.js"></script>
     <script src="/JavaScript Assets/loading-site.js"></script>
+
+    <script>
+    // Add this function to handle iframe sandboxing
+    function sandboxIframes() {
+        const iframes = document.getElementsByTagName('iframe');
+        for (let iframe of iframes) {
+            // Add sandbox attributes to restrict iframe capabilities while allowing necessary functionality
+            iframe.sandbox = "allow-same-origin allow-scripts allow-forms allow-pointer-lock allow-top-navigation";
+        }
+    }
+
+    // Add observer to handle dynamically added iframes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes) {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeName === 'IFRAME') {
+                        sandboxIframes();
+                    }
+                });
+            }
+        });
+    });
+
+    // Start observing the document
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // Initial sandbox setup
+    document.addEventListener('DOMContentLoaded', sandboxIframes);
+    </script>

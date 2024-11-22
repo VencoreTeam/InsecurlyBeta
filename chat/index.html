@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/gh/mathusummut/confetti.js/confetti.min.js"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="/posts/badges.css">
+    <link rel="icon" type="image/x-icon" href="/StaticMedia/sent.png">
+  <title>Wavee Community Chat</title>
+</head>
+<body>
+   <nav class="navbar">
+    <!--<div class="navbar-logo"><img src="/Image Assets/wavee-small%20logo.png" width="200" height="81"></div>-->
+    <div class="account-menu">
+      <img class="user-profile-picture" src="/StaticMedia/Icons/cog-wheel.png" width="100" height="100" alt="Chat Settings">
+      Chat Settings
+      <span id="user-username"></span> &#9662;
+      <div class="account-menu-options">
+        <div class="emoji-option">
+            <input type="checkbox" id="emoji-toggle" checked="true">
+😊 Auto-Mojis
+          </label>
+        </div>
+        <div class="color-option">
+          <label class="dark-mode-toggle">
+            <input type="checkbox" id="dark-mode-toggle" checked="true">
+🌙 Darkmode
+          </label>
+        </div>
+        <div class="color-option">
+          <label class="">
+            <input type="checkbox" id="" checked="false" disabled="true">
+<!-- When Feature Is Done Add Checkbox Text Here-->
+          </label>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="chat-container">
+    <div class="chat-messages" id="chat-messages">
+    <!----  <div class="timer-banner centered-text">
+        <b>ⓘ</b>
+      </div> -->
+       Mystic Chat (Beta) | <img src="/StaticMedia/Icons/cog-wheel.png" width="17" height="17"> Version: 1.1<br>
+       <br>
+       <div id="no-messages" class="no-messages">
+
+        <br>
+        <img src="/StaticMedia/Icons/info-icon.png" width="50" height="50" alt="Get Started Image">
+       <br>
+       <br>
+        <p>Welcome To Mystic Chat <b>Beta</b>.</p>
+        <br>
+    </div>
+    
+      <!-- messages will be displayed here -->
+    <br>
+    </div>
+
+
+  <br>
+      <br>
+  <br>
+  
+  
+    <div class="chat-input">
+      
+<div id="emoji-popup" class="emoji-popup" style="display: none; position: fixed; bottom: 50px; right: 50px;">
+        <p class="close-btn" style="position: absolute; top: 5px; right: 5px; cursor: pointer; color: white;">x</p>
+        <h4 style="color: white;">Emojis</h4>
+  <img src="/StaticMedia/Emojis/joi-bridge.png" width="50" height="50" data-emoji="emoji:joibridge" alt="😊">
+  <!-- Add more emoji images with data-emoji attributes -->
+</div>
+<br>
+    <br>
+      <input type="text" id="message-input" placeholder="Message..." maxlength="1000">
+      <button id="send-button"><img src="/StaticMedia/Icons/sent.png" width="17" height="17"></button>
+      
+</label>
+
+    </div>
+  </div>
+  <div id="user-popup" class="popup">
+    <br>
+    <p>User Profile - Beta</p>
+    <br>
+    <img id="popup-profile-picture" src="" alt="Profile Picture">
+    <p>
+    <span style="color: rgb(0, 170, 255);"></span><span id="popup-username" class="popup-username"></span>
+  </p>
+    <button id="close-popup-button" class="close-button">Close Profile Page</button>
+      <button style="display: none;" id="copy-user-id-button" class="copy-button">Copy User ID</button>
+    </div>
+
+    <div id="c-custom-popup" class="c-popup">
+      <div class="c-popup-content">
+          <p>Are you sure you want to send this message?</p>
+          <br>
+          <button id="confirm-button">&nbsp; Yes &nbsp;</button>
+          <button id="cancel-button">&nbsp; No &nbsp;</button>
+          <br>
+ <br>
+          <p><b>Note:</b> The Contents Of This Message May Be Offensive To Some People, Unless it violates our Community Guidelines You Will Not Be Filterd Nor Striked For Sending This Message.</b>
+      </div>
+  </div>
+  
+  
+  <div id="custom-popup" class="custom-popup">
+    <div class="custom-popup-content">
+        <span id="popup-message" class="popup-message">Badge Unlocked</span>
+        <p>You Have Successfully unlocked the Joi Badge, She Will Now Appear Beside Your Name On Most Places Your Username is.</p>
+        <br>
+        <img src="/Image Assets/WaveeLogo-circle.png" width="50" height="50"><p> &nbsp; &nbsp; &nbsp; Wavee <img src="/Image Assets/verified-new.png" width="13" height="13"> <img src="/Image Assets/joi.png" class="joi-img" width="13" height="13"></p>
+    <br>
+        <br>
+        
+        <button id="close-popup" class="close-popup-button">Close</button>
+    </div>
+</div>
+
+<div id="tos-popup" class="tos-popup">
+  <div class="custom-tos-popup-content">
+    <img src="/StaticMedia/Icons/info-icon.png" width="50" height="50">
+  <br>
+    <br>
+      <span id="popup-message2" class="popup-message2"></span>
+
+      <br>
+    <br>
+      <button id="close-popup-tos" class="close-tos-popup-button">Ok</button>
+  </div>
+</div>
+
+<div id="welcome-popup" class="wpopup">
+  <div class="wpopup-content">
+    <span class="wclose-popup" id="close-welcome-popup">&times;</span>
+    <h2>Welcome, New User</h2>
+    <br>
+    <p>We're glad you're here! Enjoy chatting with The Mystic Community, Let The Wavee Team Know If There Is Anything/Anyone Giving You issues.</p>
+  </div>
+</div>
+
+<!-- Emoji Popup - Add your emoji images with data-emoji attribute -->
+
+
+  
+  <!-- Firebase scripts -->
+   <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+
+  
+<script src="testapp.js" type="module"></script>
+
+</body>
+</html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('scroll', function() {
+        const scrollToBottomBanner = document.getElementById('scrollToBottomBanner');
+        if (scrollToBottomBanner) {
+            const chatMessages = document.getElementById('chat-messages'); // Replace with your chat window's actual ID
+
+            if (chatMessages) {
+                const lastMessage = chatMessages.lastElementChild; // Get the last sent message container
+                const lastMessagePosition = lastMessage.getBoundingClientRect().bottom;
+                const windowBottom = window.innerHeight;
+
+                if (lastMessagePosition < windowBottom) {
+                    scrollToBottomBanner.style.display = 'none';
+                } else {
+                    if (window.scrollY > 200) { // Adjust this value based on when you want the banner to appear
+                        scrollToBottomBanner.style.display = 'block';
+                    } else {
+                        scrollToBottomBanner.style.display = 'none';
+                    }
+                }
+            }
+        }
+    });
+
+    document.getElementById('scrollToBottomBanner').addEventListener('click', function() {
+        const chatMessages = document.getElementById('chat-messages'); // Replace with your chat window's actual ID
+        if (chatMessages) {
+            const lastMessage = chatMessages.lastElementChild; // Get the last sent message container
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                document.getElementById('scrollToBottomBanner').style.display = 'none'; // Hide the banner after scrolling
+            }
+        }
+    });
+});
+
+
+</script>
+<div id="scrollToBottomBanner" style="display: none; position: fixed; bottom: 70px; right: 20px; padding: 10px; background-color: #1f1e1ead; color: #fff; cursor: pointer; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); z-index: 999;">
+  Scroll to Bottom
+</div>
+

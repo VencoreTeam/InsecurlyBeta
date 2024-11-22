@@ -67,7 +67,7 @@
         }
 
         button {
-            background: #4f46e5;
+            background: #000000;
             color: white;
             padding: 16px 32px;
             border: none;
@@ -79,7 +79,7 @@
         }
 
         button:hover {
-            background: #4338ca;
+            background: #00000049;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
         }
@@ -121,11 +121,39 @@
         .speed-medium { background: #fef3c7; color: #d97706; }
         .speed-slow { background: #fee2e2; color: #dc2626; }
 
+        /* Status badge styles */
+        .status-badge {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            white-space: nowrap;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .status-online { background-color: #034e23; color: white; }
+        .status-down { background-color: #e74c3c; color: white; }
+
+        .delete-btn, .edit-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin: 4px;
+        }
+
         .delete-btn {
             background: #fee2e2;
             color: #dc2626;
-            padding: 8px 16px;
-            border-radius: 8px;
+        }
+
+        .edit-btn {
+            background: #e5e9f2;
+            color: #4f46e5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
         }
     </style>
 </head>
@@ -170,7 +198,15 @@
                 </select>
             </div>
 
-            <button type="submit">Add Proxy</button>
+            <div class="form-group">
+                <label for="status">Speed:</label>
+                <select id="status" required>
+                    <option value="Online">Online</option>
+                    <option value="Down">Down</option>
+                </select>
+            </div>
+
+            <button type="submit" id="submit-btn">Add Proxy</button>
         </form>
 
         <div class="proxy-list" id="proxy-list">
@@ -180,7 +216,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // Your Firebase config here
@@ -200,6 +236,8 @@
         const db = getDatabase();
         const auth = getAuth();
 
+        let editingId = null;
+
         // Check authentication
         onAuthStateChanged(auth, (user) => {
             if (!user) {
@@ -215,16 +253,23 @@
                 name: document.getElementById('name').value,
                 url: document.getElementById('url').value,
                 icon: document.getElementById('icon').value,
-                speed: document.getElementById('speed').value
+                speed: document.getElementById('speed').value,
+                status: document.getElementById('status').value
             };
 
             try {
-                await push(ref(db, 'proxies/web'), proxyData);
+                if (editingId) {
+                    await update(ref(db, `proxies/web/${editingId}`), proxyData);
+                    editingId = null;
+                    document.getElementById('submit-btn').textContent = 'Add Proxy';
+                } else {
+                    await push(ref(db, 'proxies/web'), proxyData);
+                }
                 e.target.reset();
-                alert('Proxy added successfully!');
+                alert(editingId ? 'Proxy updated successfully!' : 'Proxy added successfully!');
             } catch (error) {
-                console.error('Error adding proxy:', error);
-                alert('Error adding proxy. Please try again.');
+                console.error('Error with proxy:', error);
+                alert('Error with proxy. Please try again.');
             }
         });
 
@@ -242,12 +287,35 @@
                     <div>
                         <i class="${proxy.icon}"></i> ${proxy.name}
                         <span class="speed-badge speed-${proxy.speed.toLowerCase()}">${proxy.speed}</span>
+                        <span class="status-badge status-${proxy.status.toLowerCase()}">${proxy.status}</span>
                     </div>
-                    <button class="delete-btn" data-id="${child.key}">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div class="button-group">
+                        <button class="edit-btn" data-id="${child.key}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" data-id="${child.key}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 `;
                 proxyList.appendChild(div);
+            });
+
+            // Add edit handlers
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const proxyRef = ref(db, `proxies/web/${btn.dataset.id}`);
+                    onValue(proxyRef, (snapshot) => {
+                        const proxy = snapshot.val();
+                        document.getElementById('name').value = proxy.name;
+                        document.getElementById('url').value = proxy.url;
+                        document.getElementById('icon').value = proxy.icon;
+                        document.getElementById('speed').value = proxy.speed;
+                        document.getElementById('status').value = proxy.status;
+                        editingId = btn.dataset.id;
+                        document.getElementById('submit-btn').textContent = 'Update Proxy';
+                    }, { onlyOnce: true });
+                });
             });
 
             // Add delete handlers

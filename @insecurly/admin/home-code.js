@@ -33,16 +33,17 @@ onAuthStateChanged(auth, async (user) => {
 
   if (user) {
 
-    // Check the "AccountActive" field in the Firestore document
-    const userDocRef = doc(db, 'users', user.uid);
-    const userDoc = await getDoc(userDocRef);
-    const isAccountActive = userDoc.data() && userDoc.data().AccountActive;
-
-    if (!isAccountActive) {
-      // If the account is not active, redirect to the "/disabled" page
-      window.location.href = "/denied";
-      return;
-    }
+    // Set up realtime listener for AccountActive status
+    const accountStatusRef = doc(db, 'users', user.uid);
+    const unsubscribe = onSnapshot(accountStatusRef, (doc) => {
+        const isAccountActive = doc.data() && doc.data().AccountActive;
+        
+        if (!isAccountActive) {
+            // If account becomes inactive, redirect to denied page
+            window.location.href = "/denied";
+            return;
+        }
+    });
     
     // User is logged in
     userUsername.textContent = user.displayName || "User";
