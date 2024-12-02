@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Messages</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="user-list">
+            <h1 style="text-align: left;">Direct Messages</h1>
+            <button class="user-list-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <ul id="userList"></ul>
+        </div>
+        <div class="chat-container">
+            <div class="beta-notice">
+                <i class="fas fa-flask"></i>
+                This is a beta version of insecurly chat. Please report any issues
+                <a style="display: none;" href="#" id="feedbackLink">here</a>
+            </div>
+            <h2 id="chatHeader">
+                <span><i class="fas fa-user"></i> Select a user to start chatting</span>
+                <button class="user-list-toggle">
+                    <i class="fas fa-comments"></i>
+                </button>
+            </h2>
+            <div id="chatMessages"></div>
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Message...">
+                <label for="imageInput" class="image-upload-label">
+                    <i class="far fa-image"></i>
+                </label>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                <button id="sendButton"><i class="far fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="chatroom.js"></script>
+</body>
+</html>

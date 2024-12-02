@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        iframe { 
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="proxy-frame" src=""></iframe>
+    <script>
+        // Get encrypted URL parameter and decode it
+        const proxyUrl = decodeAndVerifyUrl(window.location.search);
+        document.getElementById('proxy-frame').src = proxyUrl;
+    </script>
+</body>
+</html> 

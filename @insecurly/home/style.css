@@ -85,37 +85,25 @@ body {
     opacity: 0.98;
     height: 40px; /* Reduced height */
 }
-body.space-mode .navbar {
-  background-image: url('/Image Assets/space.png');
-  background-color: #000000;
-  color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  border-radius: 1px;
-  opacity: 0.98;
-  height: 50px;
-}
-body.miles-mode .navbar {
-  background-image: url('/Theme Assets/gwen&miles.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-color: #020b5200;
-  color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  border-radius: 1px;
-  opacity: 0.98;
-  height: 50px;
-}
+
 .navbar-logo {
-  font-size: 20px; /* Reduced font size */
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.navbar-logo img {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
 }
 
 .account-menu {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px;
+  border-radius: 4px;
   position: relative;
   cursor: pointer;
   color: white;
@@ -164,16 +152,6 @@ body.miles-mode .navbar {
 .dark-mode .account-menu-option:hover {
   background-color: #232323;
 }
-.color-option {
-  padding: 10px;
-  text-align: center;
-  color: #007bff;
-  transition: background-color 0.3s ease;
-}
-.color-option:hover {
-  background-color: #f4f4f4;
-}
-
 
 /* Style the custom scrollbar track */
 ::-webkit-scrollbar {
@@ -192,16 +170,19 @@ body.miles-mode .navbar {
   display: block;
 }
 
-/* Style the notification icon */
+/* Notification icon styling */
 .notification-icon {
-  font-size: 18px;
-  cursor: pointer;
-  margin-right: 15px;
-  transition: color 0.3s ease;
+  padding: 5px;
+  border-radius: 6px;
+  background: rgba(0, 183, 255, 0.212);
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+  margin-right: 10px;
 }
 
 .notification-icon:hover {
-  color: #007bff;
+  background: rgba(0, 183, 255, 0.12);
+  transform: translateY(-1px);
 }
 
 /* Style the notification dropdown container */
@@ -260,8 +241,8 @@ body.miles-mode .navbar {
 }
 
 .notification-menu-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px 0 rgba(0, 82, 233, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
 }
 
 .notification-menu-item:last-child {
@@ -347,4 +328,50 @@ transform: scale(1.01); /* Slightly increase the size to indicate hover */
 /* To ensure the effect is reversed when the mouse is moved away */
 a {
 transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and transform */
+}
+
+.container {
+  max-width: 1000px;
+  margin: 15px auto;
+  padding: 15px;
+  background: rgb(1, 9, 36);
+  border-radius: 10px;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+.item {
+  flex: 1;
+  margin-bottom: 15px;
+  border: 1px solid rgba(1,42,192,.3);
+  padding: 10px;
+  border-radius: 6px;
+  transition: .3s;
+}
+.item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 3px 10px rgba(0,0,0,.1);
+}
+.item img {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+@media (max-width: 768px) {
+  .container {padding: 8px}
+  .item {flex: 0 0 48%}
+  .os-btn {
+      padding: 8px 12px;
+      font-size: 13px;
+  }
+}
+@media (max-width: 480px) {
+  .container {flex-direction: column}
+  .item {width: 100%}
+  #draggable {
+      padding: 8px;
+      font-size: 13px;
+  }
 }

@@ -1,6 +1,6 @@
 body {
-    font-family: Ginto, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: #36393f;
+    font-family: CircularSp, CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek, CircularSp-Deva, "Helvetica Neue", helvetica, arial, "Hiragino Kaku Gothic Pro", Meiryo, "MS Gothic", sans-serif;
+    background: #121212;
     color: #ffffff;
     text-align: center;
 }
@@ -10,21 +10,27 @@ h1 {
 }
 
 .action-btn {
-    transition: 0.7s ease;
+    transition: all 0.3s ease;
     padding: 12px;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     border: none;
-    border-radius: 5rem;
+    border-radius: 500px;
+    background: #282828;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .action-btn:hover {
-    background-color: #27292e;
-    color: white;
+    background-color: #3e3e3e;
+    transform: scale(1.04);
 }
 
 .action-btn svg {
-    height: 5rem;
+    height: 24px;
+    width: 24px;
 }
 
 .category div {
@@ -33,23 +39,29 @@ h1 {
     flex-wrap: wrap;
     max-width: 800px;
     margin: 0 auto;
+    gap: 1rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
 }
 
 main button {
-    color: black;
-    font-weight: bold;
+    background: #282828;
+    color: #ffffff;
+    font-weight: 700;
     border: 0;
     width: 6rem;
-    word-wrap: break-word;
     height: 6rem;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 5px 5px 5px 0 #202225;
+    transition: all 0.3s ease;
     margin: 1rem;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
 }
 
 main button:hover {
-    animation: pulsate 1s ease-in-out;
+    background: #3e3e3e;
+    transform: scale(1.04);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
 }
 
 @keyframes pulsate {
@@ -92,38 +104,38 @@ main button:active {
 }
 
 .green {
-    background-color: greenyellow;
+    background-color: #1ed760;
 }
 
 .aqua {
-    background-color: aqua;
-    border-color: aqua;
+    background-color: #1db954;
 }
 
 .cyan {
-    background-color: #22ffc0;
+    background-color: #1db954;
 }
 
 .dark-red {
-    background-color: darkred;
-    border-color: darkred;
-    color: white;
+    background-color: #e91429;
 }
 
 .msg-box {
-    background-color:#202225;
+    background-color: #282828;
     color: white;
-    font-weight: bolder;
-    padding: 0.5rem;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    font-weight: 500;
+    padding: 1rem;
+    border-radius: 8px;
     position: fixed;
-    width: calc(100% - 1rem);
-    bottom: 0;
-    left: 0;
+    width: calc(100% - 2rem);
+    max-width: 500px;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    flex-direction: row;
+    align-items: center;
     justify-content: center;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 50%);
+    animation: slideUp 0.3s ease;
 }
 
 #github-button svg{
@@ -144,35 +156,29 @@ main button:active {
   
   .search-box {
     width: 19rem;
-    height: 60px;
-    background: #27292e;
-    line-height: 40px;
-    padding: 10px;
-    border-radius: 60px;
-    cursor: pointer;
+    height: 48px;
+    background: #282828;
+    padding: 6px 12px;
+    border-radius: 500px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   
   .search-input {
-    background: #27292e;
+    background: transparent;
     color: #fff;
-    outline: none;
-    border: none;
-    line-height: 40px;
-    font-size: 1em;
-    transition: 0.7s ease;
+    font-size: 0.875rem;
+    padding: 6px 36px;
+    flex: 1;
   }
   
   .search-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    background: #27292e;
-    padding: 12px;
+    padding: 8px;
     border-radius: 50%;
-    float: right;
-    color: #22ffc0;
-    transition: 0.4s ease;
+    background: #1ed760;
+    color: #000;
+    transition: all 0.3s ease;
   }
 
   .search-box:hover > .search-btn, 
@@ -192,8 +198,8 @@ main button:active {
 }
 
 #settings-menu {
-    border-radius: 1rem;
-    background-color: rgb(28, 28, 28);
+    border-radius: 8px;
+    background-color: #282828;
     width: 30rem;
     height: 30rem;
     position: absolute;
@@ -202,17 +208,23 @@ main button:active {
     transform: translate(-50%, -50%);
     color: rgb(255, 255, 255);
     font-size: x-large;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 50%);
 }
 
 #save-settings {
-    border: 3px solid black;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin: 2rem;
-    font-weight: bolder;
-    background: none;
-    width: 6rem;
-    font-size: large;
+    background: #1ed760;
+    color: #000;
+    border: none;
+    border-radius: 500px;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+#save-settings:hover {
+    transform: scale(1.04);
 }
 
 #settings-background {
@@ -238,4 +250,15 @@ main button:active {
 #settings-btn i {
     filter: invert(1);
     font-size: x-large;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
 }

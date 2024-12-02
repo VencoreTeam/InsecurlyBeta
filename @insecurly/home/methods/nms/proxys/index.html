@@ -9,397 +9,508 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --accent-color: #e74c3c;
-            --background-color: #000020;
-            --text-color: #333;
-            --card-background: #070742;
-        }
-
-        body {
-            font-size: 14px;
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        .container {
-            max-width: 1800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 2em;
-            font-weight: 600;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            user-select: none;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            user-select: none;
-        }
-
-        .proxy-category {
-            background-color: var(--card-background);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow-y: auto;
-        }
-
-        .proxy-category:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-
-        h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            font-weight: 600;
-            user-select: none;
-        }
-
-        .trending {
-            background-color: var(--card-background);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            user-select: none;
-        }
-
-        .trending h2 {
-            color: var(--accent-color);
-            border-bottom-color: var(--accent-color);
-        }
-
-        .trending ul {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .trending li {
-            flex: 0 1 calc(14.28% - 15px);
-            margin: 8px 0;
-        }
-
-        a {
-            text-decoration: none;
-            transition: color 0.3s ease, transform 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        a:hover {
-            transform: translateX(5px);
-        }
-
-        a i {
-            margin-right: 10px;
-            font-size: 1em;
-        }
-
-        /* New styles for unique proxy colors */
-        .proxy-interstellar { color: #ff6b6b; }
-        .proxy-dodge { color: #4ecdc4; }
-        .proxy-asteroids { color: #45aaf2; }
-        .proxy-asteroids-alt { color: #2ecc71; }
-        .proxy-spacego { color: #fd9644; }
-
-        /* Hover effect for proxy links */
-        .proxy-interstellar:hover { color: #ff8787; }
-        .proxy-dodge:hover { color: #6be5d8; }
-        .proxy-asteroids:hover { color: #6fc6ff; }
-        .proxy-asteroids-alt:hover { color: #4aed8d; }
-        .proxy-spacego:hover { color: #ffb260; }
-
-        .footer {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 30px;
-            border-top: 1px solid #ddd;
-            color: #777;
-            user-select: none;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 15px;
-        }
-        .footer i {
-            margin-right: 5px;
-            color: #555;
-        }
-
-        .proxy-category ul {
-            max-height: 150px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .proxy-category ul::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .proxy-category ul::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .proxy-category ul::-webkit-scrollbar-thumb {
-            background-color: var(--primary-color);
-            border-radius: 4px;
-        }
-
-        .proxy-link {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .proxy-name {
-            display: flex;
-            align-items: center;
-        }
-
-        /* Speed indicator badge styles */
-        .speed-badge {
-            font-size: 0.75em;
-            padding: 3px 8px;
-            border-radius: 12px;
-            white-space: nowrap;
-            font-weight: bold;
-            text-transform: uppercase;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .speed-fast { background: #ecfdf5; color: #059669; }
-        .speed-medium { background: #fef3c7; color: #d97706; }
-        .speed-slow { background: #fee2e2; color: #dc2626; }
-
-        /* Status badge styles */
-        .status-badge {
-            font-size: 0.75em;
-            padding: 3px 8px;
-            border-radius: 12px;
-            margin-left: 8px;
-            white-space: nowrap;
-            font-weight: bold;
-            text-transform: uppercase;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .status-online { background-color: #034e23; color: white; }
-        .status-down { background-color: #e74c3c; color: white; }
-
-        /* Update credits intro styles */
-        .credits-intro {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #000020 0%, #000046 100%);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            animation: fadeOut 3s ease-in-out 5s forwards;
-        }
-
-        .intro-content {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .credits-intro h1 {
-            font-size: 2.5em;
-            margin: 1.5rem 0;
-            color: #3498db;
-        }
-
-        .credits-intro img {
-            width: 120px;
-            height: auto;
-            margin-bottom: 1rem;
-            animation: pulse 2s infinite;
-            filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.137));
-        }
-
-        .intro-details p {
-            font-size: 1.2em;
-            margin: 0.8rem 0;
-            opacity: 0;
-            animation: fadeIn 1s ease-in-out forwards;
-            letter-spacing: 0.5px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; visibility: hidden; }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        #proxy-frame-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            display: none;
-        }
-
-        .proxy-frame-wrapper {
-            position: relative;
-            width: 95%;
-            height: 90vh;
-            margin: 2.5vh auto;
-            background: var(--card-background);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .proxy-close-btn {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            background: var(--accent-color);
-            border: none;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1001;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .proxy-close-btn:hover {
-            background: #c0392b;
-            transform: scale(1.05);
-        }
-
-        #proxy-frame {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-        }
-
-        /* Media queries for better responsiveness */
-        @media screen and (max-width: 768px) {
-            .proxy-frame-wrapper {
-                width: 100%;
-                height: 100vh;
-                margin: 0;
-                border-radius: 0;
-            }
-            
-            .proxy-close-btn {
-                top: 10px;
-                right: 10px;
-            }
-        }
-
-        .proxy-intro-ad {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #000020 0%, #000046 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1002;
-        }
-
-        .intro-ad-content {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .intro-ad-content img {
-            width: 120px;
-            height: auto;
-            margin-bottom: 1rem;
-            animation: pulse 2s infinite;
-        }
-
-        .intro-ad-content h2 {
-            color: #3498db;
-            margin: 1rem 0;
-        }
-
-        .intro-ad-content p {
-            color: #fff;
-            margin: 0.5rem 0;
-        }
-
-        .loading-bar {
-            width: 200px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            margin: 1rem auto;
-            overflow: hidden;
-        }
-
-        .loading-progress {
-            width: 0%;
-            height: 100%;
-            background: #3498db;
-            animation: loading 2s ease-in-out forwards;
-        }
-
-        @keyframes loading {
-            from { width: 0%; }
-            to { width: 100%; }
-        }
+ :root {
+	--primary-color: #3498db;
+	--secondary-color: #2ecc71;
+	--accent-color: #e74c3c;
+	--background-color: #000020;
+	--text-color: #333;
+	--card-background: #070742;
+}
+body {
+	font-size: 14px;
+	font-family: 'Poppins', sans-serif;
+	background-color: var(--background-color);
+	color: var(--text-color);
+}
+.container {
+	max-width: 1800px;
+	margin: 0 auto;
+	padding: 20px;
+}
+h1 {
+	font-size: 2em;
+	font-weight: 600;
+	color: var(--primary-color);
+	text-align: center;
+	margin-bottom: 30px;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+	user-select: none;
+}
+.dashboard {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 20px;
+	user-select: none;
+}
+.proxy-category {
+	background-color: var(--card-background);
+	border-radius: 15px;
+	padding: 15px;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	overflow-y: auto;
+}
+.proxy-category:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+h2 {
+	color: var(--primary-color);
+	border-bottom: 2px solid var(--primary-color);
+	padding-bottom: 8px;
+	margin-bottom: 15px;
+	font-size: 1.2em;
+	font-weight: 600;
+	user-select: none;
+}
+.trending {
+	background-color: var(--card-background);
+	border-radius: 15px;
+	padding: 15px;
+	margin-bottom: 30px;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+	user-select: none;
+}
+.trending h2 {
+	color: var(--accent-color);
+	border-bottom-color: var(--accent-color);
+}
+.trending ul {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+.trending li {
+	flex: 0 1 calc(14.28% - 15px);
+	margin: 8px 0;
+}
+a {
+	text-decoration: none;
+	transition: color 0.3s ease, transform 0.3s ease;
+	display: flex;
+	align-items: center;
+}
+a:hover {
+	transform: translateX(5px);
+}
+a i {
+	margin-right: 10px;
+	font-size: 1em;
+}
+/* New styles for unique proxy colors */
+.proxy-interstellar {
+	color: #ff6b6b;
+}
+.proxy-dodge {
+	color: #4ecdc4;
+}
+.proxy-asteroids {
+	color: #45aaf2;
+}
+.proxy-asteroids-alt {
+	color: #2ecc71;
+}
+.proxy-spacego {
+	color: #fd9644;
+}
+/* Hover effect for proxy links */
+.proxy-interstellar:hover {
+	color: #ff8787;
+}
+.proxy-dodge:hover {
+	color: #6be5d8;
+}
+.proxy-asteroids:hover {
+	color: #6fc6ff;
+}
+.proxy-asteroids-alt:hover {
+	color: #4aed8d;
+}
+.proxy-spacego:hover {
+	color: #ffb260;
+}
+.footer {
+	text-align: center;
+	padding: 20px 0;
+	margin-top: 30px;
+	border-top: 1px solid #ddd;
+	color: #777;
+	user-select: none;
+}
+ul {
+	list-style-type: none;
+	padding: 0;
+}
+li {
+	margin-bottom: 15px;
+}
+.footer i {
+	margin-right: 5px;
+	color: #555;
+}
+.proxy-category ul {
+	max-height: 150px;
+	overflow-y: auto;
+	padding-right: 10px;
+}
+.proxy-category ul::-webkit-scrollbar {
+	width: 8px;
+}
+.proxy-category ul::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 4px;
+}
+.proxy-category ul::-webkit-scrollbar-thumb {
+	background-color: var(--primary-color);
+	border-radius: 4px;
+}
+.proxy-link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.proxy-name {
+	display: flex;
+	align-items: center;
+}
+/* Speed indicator badge styles */
+.speed-badge {
+	font-size: 0.75em;
+	padding: 3px 8px;
+	border-radius: 12px;
+	white-space: nowrap;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: all 0.3s ease;
+}
+.speed-fast {
+	background: #ecfdf5;
+	color: #059669;
+}
+.speed-medium {
+	background: #fef3c7;
+	color: #d97706;
+}
+.speed-slow {
+	background: #fee2e2;
+	color: #dc2626;
+}
+/* Status badge styles */
+.status-badge {
+	font-size: 0.75em;
+	padding: 3px 8px;
+	border-radius: 12px;
+	margin-left: 8px;
+	white-space: nowrap;
+	font-weight: bold;
+	text-transform: uppercase;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.status-online {
+	background-color: #034e23;
+	color: white;
+}
+.status-down {
+	background-color: #e74c3c;
+	color: white;
+}
+/* Update credits intro styles */
+.credits-intro {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, #000020 0%, #000046 100%);
+	color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
+	animation: fadeOut 3s ease-in-out 5s forwards;
+}
+.intro-content {
+	text-align: center;
+	padding: 2rem;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 20px;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.credits-intro h3 {
+	font-size: 2.5em;
+	margin: 1.5rem 0;
+	color: #3498db;
+}
+.credits-intro img {
+	width: 120px;
+	height: auto;
+	margin-bottom: 1rem;
+	animation: pulse 2s infinite;
+	filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.137));
+}
+.intro-details p {
+	font-size: 1.2em;
+	margin: 0.8rem 0;
+	opacity: 0;
+	animation: fadeIn 1s ease-in-out forwards;
+	letter-spacing: 0.5px;
+}
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+		visibility: hidden;
+	}
+}
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+#proxy-frame-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.9);
+	z-index: 1000;
+	display: none;
+}
+.proxy-frame-wrapper {
+	position: relative;
+	width: 95%;
+	height: 90vh;
+	margin: 2.5vh auto;
+	background: var(--card-background);
+	border-radius: 15px;
+	overflow: hidden;
+	box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+.proxy-close-btn {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	background: var(--accent-color);
+	border: none;
+	color: white;
+	padding: 8px 15px;
+	border-radius: 5px;
+	cursor: pointer;
+	z-index: 1001;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+.proxy-close-btn:hover {
+	background: #c0392b;
+	transform: scale(1.05);
+}
+#proxy-frame {
+	width: 100%;
+	height: 100%;
+	border: none;
+	background: #fff;
+}
+/* Media queries for better responsiveness */
+@media screen and (max-width: 768px) {
+	.proxy-frame-wrapper {
+		width: 100%;
+		height: 100vh;
+		margin: 0;
+		border-radius: 0;
+	}
+	.proxy-close-btn {
+		top: 10px;
+		right: 10px;
+	}
+}
+.proxy-intro-ad {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, #000020 0%, #000046 100%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1002;
+}
+.intro-ad-content {
+	background: rgba(0, 0, 32, 0.95);
+	border: 1px solid rgba(52, 152, 219, 0.2);
+	border-radius: 20px;
+	padding: 2.5rem;
+	backdrop-filter: blur(15px);
+	box-shadow: 0 0 30px rgba(52, 152, 219, 0.15);
+	max-width: 450px;
+	width: 90%;
+}
+.intro-ad-content img {
+	width: 120px;
+	height: auto;
+	margin-bottom: 1rem;
+	animation: pulse 2s infinite;
+}
+.intro-ad-content h2 {
+	color: #3498db;
+	font-size: 1.2rem;
+	margin: 1.5rem 0;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+.intro-ad-content p {
+	color: #fff;
+	margin: 0.5rem 0;
+}
+.stat-item {
+    text-align: center;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+}
+.loading-bar {
+	width: 280px;
+	height: 4px;
+	background: rgba(52, 152, 219, 0.1);
+	border-radius: 2px;
+	margin: 2rem auto;
+	overflow: hidden;
+}
+.loading-progress {
+	height: 100%;
+	background: linear-gradient(90deg, #3498db, #2ecc71);
+	animation: loading 2s ease-in-out forwards;
+	box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+.version-info {
+	color: #3498db;
+	font-size: 0.9rem;
+	font-family: 'Courier New', monospace;
+	margin: 1rem 0;
+}
+.status-info {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 0.9rem;
+}
+.status-text {
+	color: #2ecc71;
+	font-weight: 600;
+}
+@keyframes loading {
+	0% {
+		width: 0%;
+		opacity: 0.5;
+	}
+	100% {
+		width: 100%;
+		opacity: 1;
+	}
+}
+.loading-stats {
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+	margin: 1.5rem 0;
+}
+.stat-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+}
+.stat-label {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+.stat-value {
+	color: #3498db;
+	font-weight: 600;
+	font-family: 'Courier New', monospace;
+}
+.proxy-controls {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	display: flex;
+	gap: 10px;
+	z-index: 1001;
+	background-color: black;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+}
+.proxy-control-btn {
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: white;
+	padding: 8px 15px;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	backdrop-filter: blur(10px);
+	font-size: 14px;
+	font-weight: 500;
+}
+/* Improve proxy frame controls */
+.proxy-controls {
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(8px);
+	border-radius: 12px;
+	padding: 4px;
+}
+.proxy-control-btn {
+	min-width: 36px;
+	height: 36px;
+}
+/* Add tooltip styles */
+.tooltip {
+	position: relative;
+}
+.tooltip:hover::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 5px 10px;
+	background: rgba(0, 0, 0, 0.8);
+	color: white;
+	font-size: 12px;
+	border-radius: 4px;
+	white-space: nowrap;
+}
     </style>
 </head>
 <body>
-    <div class="credits-intro">
+    <div style="display: none;" class="credits-intro">
         <div class="intro-content">
             <img src="/Image Assets/InsecurlyLogo.png" alt="Insecurly Logo">
             <h1>Welcome to Insecurly Premium</h1>
@@ -485,14 +596,14 @@
                 </ul>
             </div>
             
-            <div class="proxy-category">
+            <div style="display: none;" class="proxy-category">
                 <h2><i class="fas fa-lock"></i> VPN Services</h2>
                 <ul>
                     <li><a href="#"><i class="fas fa-clock"></i> Coming Soon</a></li>
                 </ul>
             </div>
             
-            <div class="proxy-category">
+            <div style="display: none;" class="proxy-category">
                 <h2><i class="fas fa-puzzle-piece"></i>Extensions</h2>
                 <ul>
                     <li><a href="#"><i class="fas fa-clock"></i> Coming Soon</a></li>
@@ -509,22 +620,46 @@
         <div id="proxy-intro-ad" class="proxy-intro-ad">
             <div class="intro-ad-content">
                 <img src="/Image Assets/InsecurlyLogo.png" alt="Insecurly Logo">
-                <h2>Welcome to Insecurly Premium Proxy</h2>
-                <p>Loading your secure connection...</p>
+                <h2>Initializing Secure Connection</h2>
+                <p>Establishing encrypted connection...</p>
+                <div class="loading-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Protocol</span>
+                        <span class="stat-value">HTTPS</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Encryption</span>
+                        <span class="stat-value">ProxWin Encrypt</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="status-info">Server Status</span>
+                        <span class="status-text">Up</span>
+                    </div>
+                </div>
                 <div class="loading-bar">
                     <div class="loading-progress"></div>
                 </div>
+                <p style="text-align: center;" class="version-info">Insecurly ProxWin v2.0</p>
             </div>
         </div>
 
         <div class="proxy-frame-wrapper">
-            <button onclick="closeProxyFrame()" class="proxy-close-btn">
-                <i class="fas fa-times"></i> Close
-            </button>
-            <iframe id="proxy-frame"></iframe>
+            <div class="proxy-controls">
+                <button onclick="toggleFullscreen()" class="proxy-control-btn tooltip" data-tooltip="Toggle Fullscreen">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button onclick="reloadFrame()" class="proxy-control-btn tooltip" data-tooltip="Reload">
+                    <i class="fas fa-sync"></i>
+                </button>
+                <button onclick="closeProxyFrame()" class="proxy-control-btn tooltip" data-tooltip="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <iframe id="proxy-frame" allowfullscreen></iframe>
         </div>
     </div>
 
+<!-- Proxy Frame Code -->
     <script>
     function openProxyFrame(url) {
         const container = document.getElementById('proxy-frame-container');
@@ -570,49 +705,78 @@
             closeProxyFrame();
         }
     }
+
+    // Add this function to handle iframe sandboxing
+    function sandboxIframes() {
+        const iframes = document.getElementsByTagName('iframe');
+        for (let iframe of iframes) {
+            // Add sandbox attributes to restrict iframe capabilities while allowing necessary functionality
+            iframe.sandbox = "allow-same-origin allow-scripts allow-forms allow-pointer-lock allow-top-navigation";
+        }
+    }
+
+    // Add observer to handle dynamically added iframes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes) {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeName === 'IFRAME') {
+                        sandboxIframes();
+                    }
+                });
+            }
+        });
+    });
+
+    // Start observing the document
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // Initial sandbox setup
+    document.addEventListener('DOMContentLoaded', sandboxIframes);
+
+    function toggleFullscreen() {
+        const frame = document.getElementById('proxy-frame');
+        
+        if (!document.fullscreenElement) {
+            if (frame.requestFullscreen) {
+                frame.requestFullscreen();
+            } else if (frame.webkitRequestFullscreen) { /* Safari */
+                frame.webkitRequestFullscreen();
+            } else if (frame.msRequestFullscreen) { /* IE11 */
+                frame.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+        }
+    }
     </script>
 
     <script type="module">
-    import {
-    	initializeApp
-    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import {
-    	getAuth,
-    	onAuthStateChanged,
-    	signOut
-    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import {
-    	getFirestore,
-    	collection,
-    	getDocs,
-    	query,
-    	orderBy,
-    	onSnapshot,
-    	doc,
-    	setDoc,
-    	getDoc,
-    	FieldValue
-    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-    import {
-    	getStorage,
-    	ref as storageRef,
-    	getDownloadURL
-    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
-    import {
-    	getDatabase,
-    	ref as databaseRef,
-    	onValue
-    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-    const firebaseConfig = {
-    	apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
-    	authDomain: "insecurly.firebaseapp.com",
-    	databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
-    	projectId: "insecurly",
-    	storageBucket: "insecurly.appspot.com",
-    	messagingSenderId: "720308147008",
-    	appId: "1:720308147008:web:1965bbaee381b55fe620a5",
-    	measurementId: "G-L1KYG6M7WZ"
-    };
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, orderBy, onSnapshot, doc, setDoc, getDoc, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+        import { getDatabase, ref as databaseRef, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9E3RbY5Jew5Xa_o5JuYzLwWLGDonFGB0",
+            authDomain: "insecurly.firebaseapp.com", 
+            databaseURL: "https://insecurly-default-rtdb.firebaseio.com",
+            projectId: "insecurly",
+            storageBucket: "insecurly.appspot.com",
+            messagingSenderId: "720308147008",
+            appId: "1:720308147008:web:1965bbaee381b55fe620a5",
+            measurementId: "G-L1KYG6M7WZ"
+        };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth();
     const db = getFirestore();
@@ -692,67 +856,288 @@
     		AdminPanelOption.addEventListener("click", () => {
     			window.location.href = "/@insecurly/admin-panel";
     		});
-    		logoutOption.addEventListener("click", () => {
-    			signOut(auth).then(() => {
-    				console.log("User logged out.");
-    				window.location.href = "/@insecurly/auth/login";
-    			}).catch((error) => {
-    				console.error("Logout error:", error.message);
-    			});
-    		});
-    	} else {
-    		window.location.href = "/@insecurly/auth/login";
-    	}
+        // Logout when logout option is clicked
+        logoutOption.addEventListener("click", () => {
+          signOut(auth)
+            .then(() => {
+              console.log("User logged out.");
+              window.location.href = "/@insecurly/auth/login"; // Redirect to the login page
+            })
+            .catch((error) => {
+              console.error("Logout error:", error.message);
+            });
+        });
+      } else {
+        // User is not logged in
+        window.location.href = "/@insecurly/auth/login"; // Redirect to the login page
+      }
     });
 
-    function toggleNotificationContainer(e) {
-    	const notificationMenu = document.getElementById("notification-menu");
-    	if (notificationMenu.style.display === "block") {
-    		notificationMenu.style.display = "none";
-    	} else {
-    		notificationMenu.style.display = "block";
-    	}
-    	e.stopPropagation();
-    }
-    const notificationIcon = document.getElementById("notification-icon");
-    notificationIcon.addEventListener("click", toggleNotificationContainer);
-    document.addEventListener("click", (e) => {
-    	const notificationMenu = document.getElementById("notification-menu");
-    	if (notificationMenu.style.display === "block") {
-    		notificationMenu.style.display = "none";
-    	}
-    });
+        // Function to toggle the notification container
+        function toggleNotificationContainer(e) {
+          const notificationMenu = document.getElementById("notification-menu");
+          if (notificationMenu.style.display === "block") {
+            notificationMenu.style.display = "none";
+          } else {
+            notificationMenu.style.display = "block";
+          }
+          e.stopPropagation(); // Stop event propagation to prevent the account menu from opening
+        }
+      
+        // Add an event listener to the bell icon
+        const notificationIcon = document.getElementById("notification-icon");
+        notificationIcon.addEventListener("click", toggleNotificationContainer);
+      
+        // Close notification menu when clicking anywhere outside
+        document.addEventListener("click", (e) => {
+          const notificationMenu = document.getElementById("notification-menu");
+          if (notificationMenu.style.display === "block") {
+            notificationMenu.style.display = "none";
+          }
+        });
+      
+        // Function to display a notification in the container
+        async function displayNotification(sender, text, timestamp) {
+          const notificationMenu = document.getElementById("notification-menu");
+          const notificationItem = document.createElement("div");
+          notificationItem.className = "notification-menu-item";
+          notificationItem.style.display = "flex";
+          notificationItem.style.alignItems = "flex-start";
+          notificationItem.style.gap = "10px";
+          
+          // First get the user's document to get their ID
+          const usersRef = collection(db, "users");
+          const q = query(usersRef, where("Username", "==", sender));
+          const querySnapshot = await getDocs(q);
+          
+          let userId;
+          if (!querySnapshot.empty) {
+            userId = querySnapshot.docs[0].id;
+          }
+          
+          // Create and style profile picture
+          const profilePic = document.createElement("img");
+          if (userId) {
+            // Use the userId to construct the storage path
+            const storageRef = ref(storage, `profile-pictures/${userId}`);
+            try {
+              const profilePicUrl = await getDownloadURL(storageRef);
+              profilePic.src = profilePicUrl;
+            } catch (error) {
+              profilePic.src = "/Image Assets/default-pfp.png";
+            }
+          } else {
+            profilePic.src = "/Image Assets/default-pfp.png";
+          }
+          
+          profilePic.style.width = "32px";
+          profilePic.style.height = "32px";
+          profilePic.style.borderRadius = "50%";
+          profilePic.style.objectFit = "cover";
+          
+          // Create content container
+          const contentContainer = document.createElement("div");
+          contentContainer.style.flex = "1";
+          
+          const senderContainer = document.createElement("div");
+          senderContainer.style.display = "flex";
+          senderContainer.style.alignItems = "center";
+          senderContainer.style.gap = "5px";
+          
+          const senderElement = document.createElement("div");
+          senderElement.textContent = `@${sender}`;
+          senderElement.style.fontWeight = "bold";
+          
+          // Add verified badge if user is admin
+          if (querySnapshot.docs[0]?.data()?.isAdmin) {
+            const verifiedBadge = document.createElement("i");
+            verifiedBadge.className = "fas fa-check-circle";
+            verifiedBadge.style.color = "#0394e6";
+            verifiedBadge.style.fontSize = "14px";
+            senderContainer.appendChild(senderElement);
+            senderContainer.appendChild(verifiedBadge);
+          } else {
+            senderContainer.appendChild(senderElement);
+          }
+          
+          // Create text and timestamp elements
+          const textElement = document.createElement("div");
+          textElement.textContent = text;
+          textElement.style.marginTop = "2px";
+          
+          const timestampElement = document.createElement("div");
+          const date = new Date(timestamp);
+          const now = new Date();
+          
+          let timeString;
+          const isToday = date.toDateString() === now.toDateString();
+          const isThisWeek = now - date < 7 * 24 * 60 * 60 * 1000;
+          
+          if (isToday) {
+            timeString = `Today at ${date.toLocaleTimeString('en-US', { 
+              hour: 'numeric', 
+              minute: '2-digit',
+              hour12: true 
+            })}`;
+          } else if (isThisWeek) {
+            timeString = date.toLocaleString('en-US', { 
+              weekday: 'long',
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            });
+          } else {
+            timeString = date.toLocaleString('en-US', { 
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            });
+          }
+          
+          timestampElement.textContent = timeString;
+          timestampElement.style.fontSize = "0.8em";
+          timestampElement.style.color = "rgba(255, 255, 255, 0.6)";
+          timestampElement.style.marginTop = "2px";
+          
+          // Append all elements
+          contentContainer.appendChild(senderContainer);
+          contentContainer.appendChild(textElement);
+          contentContainer.appendChild(timestampElement);
+          
+          notificationItem.appendChild(profilePic);
+          notificationItem.appendChild(contentContainer);
+          
+          notificationMenu.appendChild(notificationItem);
+        }
+      
+        // Function to fetch and display notifications
+        async function fetchAndDisplayNotifications() {
+          const notificationsCollection = collection(db, "notifications");
+          
+          // Create a query to order notifications by timestamp in descending order
+          const notificationsQuery = query(notificationsCollection, orderBy("timestamp", "desc"));
+          
+          const notificationMenu = document.getElementById("notification-menu");
+          
+          onSnapshot(notificationsQuery, async (snapshot) => {
+            // Clear existing notifications
+            notificationMenu.innerHTML = '';
+            
+            // Convert snapshot to array for sorting
+            const notifications = [];
+            for (const doc of snapshot.docs) {
+              const notification = doc.data();
+              notifications.push(notification);
+            }
 
-    function displayNotification(sender, text, timestamp) {
-    	const notificationMenu = document.getElementById("notification-menu");
-    	const notificationItem = document.createElement("div");
-    	notificationItem.className = "notification-menu-item";
-    	const senderElement = document.createElement("div");
-    	senderElement.textContent = `@${sender}`;
-    	const textElement = document.createElement("div");
-    	textElement.textContent = text;
-    	const timestampElement = document.createElement("div");
-    	timestampElement.textContent = `${timestamp}`;
-    	notificationItem.appendChild(senderElement);
-    	notificationItem.appendChild(textElement);
-    	notificationItem.appendChild(timestampElement);
-    	notificationMenu.appendChild(notificationItem);
-    }
+            // Sort notifications by timestamp descending
+            notifications.sort((a, b) => b.timestamp - a.timestamp);
+            
+            // Display notifications in order
+            for (const notification of notifications) {
+              try {
+                await displayNotification(notification.sender, notification.text, notification.timestamp);
+              } catch (error) {
+                console.error('Error displaying notification:', error);
+                // Display fallback notification if user data is missing
+                displayFallbackNotification(notification);
+              }
+            }
+          });
+        }
+      
+        // Fallback display function for notifications with missing user data
+        function displayFallbackNotification(notification) {
+          const notificationMenu = document.getElementById("notification-menu");
+          const notificationItem = document.createElement("div");
+          notificationItem.className = "notification-menu-item";
+          notificationItem.style.display = "flex";
+          notificationItem.style.alignItems = "flex-start";
+          notificationItem.style.gap = "10px";
 
-    function fetchAndDisplayNotifications() {
-    	const notificationsCollection = collection(db, "notifications");
-    	const notificationsQuery = query(notificationsCollection, orderBy("timestamp", "desc"));
-    	const notificationMenu = document.getElementById("notification-menu");
-    	onSnapshot(notificationsQuery, (snapshot) => {
-    		notificationMenu.innerHTML = '';
-    		snapshot.forEach((doc) => {
-    			const notification = doc.data();
-    			displayNotification(notification.sender, notification.text, notification.timestamp);
-    		});
-    	});
-    }
-    window.addEventListener("load", fetchAndDisplayNotifications);
+          // Use default profile picture
+          const profilePic = document.createElement("img");
+          profilePic.src = "/Image Assets/default-pfp.png";
+          profilePic.style.width = "32px";
+          profilePic.style.height = "32px";
+          profilePic.style.borderRadius = "50%";
+          profilePic.style.objectFit = "cover";
 
+          const contentContainer = document.createElement("div");
+          contentContainer.style.flex = "1";
+
+          const senderContainer = document.createElement("div");
+          senderContainer.style.display = "flex";
+          senderContainer.style.alignItems = "center";
+          senderContainer.style.gap = "5px";
+
+          const senderElement = document.createElement("div");
+          senderElement.textContent = notification.sender || "Unknown User";
+          senderElement.style.fontWeight = "bold";
+          senderContainer.appendChild(senderElement);
+
+          // Add notification content
+          const textElement = document.createElement("div");
+          textElement.textContent = notification.text;
+          textElement.style.marginTop = "2px";
+
+          // Add timestamp
+          const timestampElement = document.createElement("div");
+          const timeString = formatTimestamp(notification.timestamp);
+          timestampElement.textContent = timeString;
+          timestampElement.style.fontSize = "0.8em";
+          timestampElement.style.color = "rgba(255, 255, 255, 0.6)";
+          timestampElement.style.marginTop = "2px";
+
+          // Assemble notification
+          contentContainer.appendChild(senderContainer);
+          contentContainer.appendChild(textElement);
+          contentContainer.appendChild(timestampElement);
+          
+          notificationItem.appendChild(profilePic);
+          notificationItem.appendChild(contentContainer);
+          
+          notificationMenu.appendChild(notificationItem);
+        }
+      
+        // Helper function to format timestamps consistently
+        function formatTimestamp(timestamp) {
+          const date = new Date(timestamp);
+          const now = new Date();
+          
+          const isToday = date.toDateString() === now.toDateString();
+          const isThisWeek = now - date < 7 * 24 * 60 * 60 * 1000;
+          
+          if (isToday) {
+            return `Today at ${date.toLocaleTimeString('en-US', { 
+              hour: 'numeric', 
+              minute: '2-digit',
+              hour12: true 
+            })}`;
+          } else if (isThisWeek) {
+            return date.toLocaleString('en-US', { 
+              weekday: 'long',
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            });
+          } else {
+            return date.toLocaleString('en-US', { 
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            });
+          }
+        }
+      
+        // Add an event listener to fetch and display notifications when the page loads
+        window.addEventListener("load", fetchAndDisplayNotifications);
     // Function to create a proxy list item
     function createProxyElement(proxy) {
         return `
@@ -810,36 +1195,3 @@
   </script>
     <script src="/JavaScript Assets/pagescripts.js"></script>
     <script src="/JavaScript Assets/loading-site.js"></script>
-
-    <script>
-    // Add this function to handle iframe sandboxing
-    function sandboxIframes() {
-        const iframes = document.getElementsByTagName('iframe');
-        for (let iframe of iframes) {
-            // Add sandbox attributes to restrict iframe capabilities while allowing necessary functionality
-            iframe.sandbox = "allow-same-origin allow-scripts allow-forms allow-pointer-lock allow-top-navigation";
-        }
-    }
-
-    // Add observer to handle dynamically added iframes
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.addedNodes) {
-                mutation.addedNodes.forEach((node) => {
-                    if (node.nodeName === 'IFRAME') {
-                        sandboxIframes();
-                    }
-                });
-            }
-        });
-    });
-
-    // Start observing the document
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-
-    // Initial sandbox setup
-    document.addEventListener('DOMContentLoaded', sandboxIframes);
-    </script>
